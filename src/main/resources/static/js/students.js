@@ -38,21 +38,24 @@ function createRowStudent(student)
 		<td >${student.phone}</td>
 		<td >${student.admissionDate}</td>
 		<td style="wid 130px;">
-			<button class="btn delete" data-toggle="modal" data-target="#delModal" 
-			data-delid="${student.id}"
-			 data-delname="${student.name}">
-				<i class="fas fa-trash" data-toggle="tooltip"
-					title="Delete"></i>
-			</button>
-
-			<button class="btn button-style view" data-toggle="modal"
-				data-target="#model-update" type="button">
-				<i class="far fa-eye"></i>
-			</button>
-			<button class="btn button-style view" data-toggle="modal"
-				data-target="#modal-edit" type="button">
-				<i class="fas fa-pen" style="color: blue;"></i>
-			</button>
+				<button class="btn delete" data-toggle="modal"
+			data-target="#delModal" th:data-delid="${student.id}"
+			th:data-delname="${student.name}">
+			<i class="fas fa-trash" data-toggle="tooltip"
+				title="Delete"></i>
+		</button>
+		<form action="/courses" class="form-inline" style="display: inline;">
+		<input type="hidden" name="id" th:value="${student.id}"/>
+		<button class="btn button-style view" onclick=""  type="submit">
+			<i class="far fa-eye"></i>
+		</button>
+		</form>	
+		
+		<button class="btn button-style view" data-toggle="modal"
+			 th:data-student-id="${student.id}"
+			data-target="#modal-edit" type="button">
+			<i class="fas fa-pen" style="color: blue;"></i>
+		</button>
 	</tr>`;
 	return row;
 }
