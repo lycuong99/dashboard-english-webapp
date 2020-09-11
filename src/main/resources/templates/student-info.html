@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorate="~{layout}">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>Dashboard - SB Admin</title>
+
+<base href="/">
+<style>
+.field {
+	text-align: right;
+	color: grey;
+}
+
+.row {
+	height: 40px;
+}
+</style>
+</head>
+<body >
+	<main layout:fragment="content">
+				<div class="container-fluid">
+					<h1 class="mt-4" th:text="'Thông tin của '+${student.name}"></h1>
+					<ol class="breadcrumb mb-4">
+						<li class="breadcrumb-item active">Dashboard</li>
+					</ol>
+
+
+					<div class="card mb-4">
+						<div class="card">
+							<div class="card-header">Student Info</div>
+							<div class="card-body">
+								<div>
+									<div class="row">
+										<div class="field col-2"><span>Tên Phụ Huynh</span></div>
+										<div class="content col-7">
+											<p th:text="${student.nameParent}"></p>
+										</div>
+									</div>
+									<div class="row">
+										<div class="field col-2"><span>SĐT Phụ Huynh</span></div>
+										<div class="content col-7">
+											<p th:text="${student.phone}"></p>
+										</div>
+									</div>
+									<div class="row">
+										<div class="field col-2"><span>Ngày sinh</span></div>
+										<div class="content col-7">
+											<p th:text="${student.bOd}"></p>
+										</div>
+									</div>
+									<div class="row">
+										<div class="field col-2"><span>Ghi chú</span></div>
+										<div class="content col-7">
+											<p th:text="${student.note}"></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card mb-4">
+					<div class="table-wrapper">
+									<div class="table-title">
+										<div class="row">
+											<div class="col-sm-4">
+												<h2>
+													Quản lí <b>Khóa học</b>
+												</h2>
+											</div>
+											<div class="col-sm-8">
+												<button type="button" class="btn btn-light"
+													data-toggle="modal" data-target="#modal-insert">
+													<i class="fas fa-plus-circle"></i><span>Thêm khóa học</span>
+												</button>
+
+											</div>
+										</div>
+									</div>
+
+
+									<table class="table table-hover table-striped"
+										id="dataTableCourse" width="100%" cellspacing="0">
+										<thead>
+											<tr>
+												<th>ID</th>
+												<th>Tên khóa học</th>
+												<th>Học phí</th>
+												<th>Tổng số buổi</th>
+												<th>Ngày đăng ký</th>
+												<th>Bắt đầu</th>
+												<th>Kết thúc</th>
+												<th>Tác Vụ</th>
+											</tr>
+										</thead>
+										<tfoot>
+											<tr>
+												<th>ID</th>
+												<th>Tên khóa học</th>
+												<th>Học phí</th>
+												<th>Tổng số buổi</th>
+												<th>Ngày đăng ký</th>
+												<th>Bắt đầu</th>
+												<th>Kết thúc</th>
+												<th>Tác Vụ</th>
+											</tr>
+										</tfoot>
+										<tbody>
+											<!-- 	<tr th:hidden="${students.size() != 0}" id="noRecordTD">
+												<td colspan="100%">No record</td>
+											</tr> -->
+
+
+											<tr th:each="course, status: ${courses}"
+												th:id="${'tr_'+course.id}">
+												<td th:text="${course.id}"></td>
+												<td th:text="${course.name}"></td>
+												<td th:text="${course.fee}"></td>
+												<td th:text="${course.totalLession}"></td>
+												<td th:text="${course.dateRegis}"></td>
+												<td th:text="${course.dateStart}"></td>
+												<td th:text="${course.dateEnd}"></td>
+												
+												<td style="width: 130px;">
+
+													<button class="btn delete" data-toggle="modal"
+														data-target="#delModal" th:data-delid="${course.id}"
+														th:data-delname="${course.name}">
+														<i class="fas fa-trash" data-toggle="tooltip"
+															title="Delete"></i>
+													</button>
+											
+													<button class="btn button-style view" data-toggle="modal"
+														 th:data-student-id="${course.id}"
+														data-target="#modal-edit" type="button">
+														<i class="fas fa-pen" style="color: blue;"></i>
+													</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+
+								</div>
+					</div>
+				</div>
+
+				<!--Modals Section-->
+				<!-- Delete Modal -->
+				<div class="modal fade" id="delModal" tabindex="-1" role="dialog"
+					aria-labelledby="delModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<form id="delForm" method="post" action="">
+								<div class="modal-header">
+									<h5 class="modal-title text-danger" id="delModalLabel">Xóa
+										học sinh?</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<p>
+										Bạn có chắc chắn muốn xóa <b id="delname"></b>?
+									</p>
+									<input id="delid" type="hidden" name="id"> <input
+										type="hidden" name="delrequest">
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-link" data-dismiss="modal">Hủy
+										bỏ</button>
+									<button id="del_btn" type="button" class="btn btn-danger">Đồng
+										ý xóa</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!--Insert Student Modal  -->
+				<div id="modal-insert" class="modal " role="dialog"
+					data-backdrop="static" data-keyboard="false" tabindex="-1"
+					aria-labelledby="staticBackdropLabel" aria-hidden="false">
+					<div class="modal-dialog modal-lg">
+						<!-- Modal content-->
+						<div class="modal-content-form">
+							<div class="modal-content" id="modal-content">
+
+								<div class="modal-header">
+									<h3>THÊM HỌC SINH</h3>
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+								</div>
+
+								<div class="modal-body">
+									<form method="POST" enctype="multipart/form-data"
+										id="student-create-form">
+										<div class="form-row ">
+											<div class="input-group col-md-6 ">
+
+												<input id="name" name="name" type="text"
+													class="form-control input--style-2"
+													placeholder="Họ tên học sinh" required="required" title="" />
+											</div>
+											<div class="input-group col-md-4">
+
+												<input id="inputClass" name="className"
+													class="form-control input--style-2" placeholder="Lớp"
+													required="required" title="" />
+											</div>
+										</div>
+										<div class="form-row ">
+											<div class="input-group col-md-6">
+
+												<input id="nameParent" name="nameParent"
+													class="form-control input--style-2"
+													placeholder="Họ tên phụ huynh" required="required"
+													title="Name is required" />
+											</div>
+											<div class="input-group col-md-4">
+
+												<input id="inputPhone" name="phone"
+													class="form-control input--style-2"
+													placeholder="SĐT phụ huynh" required="required"
+													title="Name is required" />
+											</div>
+										</div>
+										<div class="form-row ">
+											<div class="input-group col-md-6">
+
+												<input id="inputbOd" name="bOd" readonly
+													class="form-control input--style-2 js-datepicker"
+													placeholder="Ngày sinh" required="required"
+													title="Name is required" /> <i
+													class="fas fa-calendar-alt input-icon js-btn-calendar"></i>
+											</div>
+											<div class="form-group col-md-4">
+
+												<input id="inputCampus" name="campus"
+													class="form-control input--style-2" placeholder="Cơ sở"
+													value="1" required="required" readonly
+													title="Name is required" />
+											</div>
+										</div>
+										<div class="form-row ">
+											<div class="input-group ">
+
+												<textarea rows="5" cols="10" name="note"
+													placeholder="Ghi chú" class="form-control input--style-2"
+													style="padding-left: 5px;"></textarea>
+											</div>
+										</div>
+
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="submit"
+										class="button-cancel-style btn btn-outline-secondary"
+										data-dismiss="modal">Cancel</button>
+									<button class="btn btn-success" id="btn-modal-insert">Save
+										changes</button>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--Edit Student Modal  -->
+				<div id="modal-edit" class="modal " role="dialog"
+					data-backdrop="static" data-keyboard="false" tabindex="-1"
+					aria-labelledby="staticBackdropLabel" aria-hidden="false">
+					<div class="modal-dialog modal-lg">
+						<!-- Modal content-->
+						<div class="modal-content-form">
+							<div class="modal-content" id="modal-content">
+
+								<div class="modal-header">
+									<h3>THÊM HỌC SINH</h3>
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+								</div>
+
+								<div class="modal-body">
+									<form method="POST" enctype="multipart/form-data"
+										id="student-edit-form">
+										<div class="form-row ">
+											<div class="input-group col-md-6 ">
+												<input name="id" type="hidden" /> <input id="name"
+													name="name" class="form-control input--style-2"
+													placeholder="Họ tên học sinh" required="required" title="" />
+											</div>
+											<div class="input-group col-md-4">
+
+												<input id="inputClass" name="className"
+													class="form-control input--style-2" placeholder="Lớp"
+													required="required" title="" />
+											</div>
+										</div>
+										<div class="form-row ">
+											<div class="input-group col-md-6">
+
+												<input id="nameParent" name="nameParent"
+													class="form-control input--style-2"
+													placeholder="Họ tên phụ huynh" required="required"
+													title="Name is required" />
+											</div>
+											<div class="input-group col-md-4">
+
+												<input id="inputPhone" name="phone"
+													class="form-control input--style-2"
+													placeholder="SĐT phụ huynh" required="required"
+													title="Name is required" />
+											</div>
+										</div>
+										<div class="form-row ">
+											<div class="input-group col-md-6">
+
+												<input id="inputbOd" name="bOd" readonly
+													class="form-control input--style-2 js-datepicker"
+													placeholder="Ngày sinh" required="required"
+													title="Name is required" /> <i
+													class="fas fa-calendar-alt input-icon js-btn-calendar"></i>
+											</div>
+											<div class="form-group col-md-4">
+
+												<input id="inputCampus" name="campus"
+													class="form-control input--style-2" placeholder="Cơ sở"
+													value="1" required="required" readonly
+													title="Name is required" />
+											</div>
+										</div>
+										<div class="form-row ">
+											<div class="input-group ">
+
+												<textarea rows="5" cols="10" name="note"
+													placeholder="Ghi chú" class="form-control input--style-2"
+													style="padding-left: 5px;"></textarea>
+											</div>
+										</div>
+
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="submit"
+										class="button-cancel-style btn btn-outline-secondary"
+										data-dismiss="modal">Cancel</button>
+									<button class="btn btn-success" id="btn-modal-update">Save
+										changes</button>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<script>
+					$('#delModal').on('show.bs.modal', function(event) {
+						var delbutton = $(event.relatedTarget);
+						var delid = delbutton.data('delid');
+						var delname = delbutton.data('delname');
+						var delmodal = $(this);
+						delmodal.find('.modal-body #delid').val(delid);
+						delmodal.find('.modal-body #delname').text(delname);
+					});
+
+					$('#delForm').on('submit', function() {
+						$('#del_btn').prop('disabled', true);
+						$('#del_btn').html('&#9203; Đang xóa');
+					});
+				</script>
+				<script th:src="@{/js/courses.js}"></script>
+			</main>
+	
+</body>
+</html>
