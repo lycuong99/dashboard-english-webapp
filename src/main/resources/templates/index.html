@@ -15,7 +15,7 @@
 <body>
  <main layout:fragment="content">
 				<div class="container-fluid">
-					<h1 class="mt-4" th:text="'ABC'">Dashboard</h1>
+					<h1 class="mt-4">Dashboard</h1>
 					<ol class="breadcrumb mb-4">
 						<li class="breadcrumb-item active">Dashboard</li>
 					</ol>
@@ -50,7 +50,7 @@
 											<tr>
 												<th>ID</th>
 												<th>Tên học sinh</th>
-												<th>Tên phụ huynh</th>
+												<th>Ghi chú</th>
 												<th>Lớp</th>
 												<th>Ngày sinh</th>
 												<th>SĐT Phụ Huynh</th>
@@ -62,7 +62,7 @@
 											<tr>
 												<th>ID</th>
 												<th>Tên học sinh</th>
-												<th>Tên phụ huynh</th>
+												<th>Ghi chú</th>
 												<th>Lớp</th>
 												<th>Ngày sinh</th>
 												<th>SĐT Phụ Huynh</th>
@@ -80,7 +80,7 @@
 												th:id="${'tr_'+student.id}">
 												<td th:text="${student.id}"></td>
 												<td th:text="${student.name}"></td>
-												<td th:text="${student.nameParent}"></td>
+												<td th:text="${student.note}"></td>
 												<td th:text="${student.className}"></td>
 												<td th:text="${student.bOd}"></td>
 												<td th:text="${student.phone}"></td>

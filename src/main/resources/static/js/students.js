@@ -32,7 +32,7 @@ function createRowStudent(student)
 	let row = `<tr id="${'tr_'+student.id}">
 		<td >${student.id}</td>
 		<td >${student.name}</td>
-		<td >${student.nameParent}</td>
+		<td th:text="${student.note}"></td>
 		<td >${student.className}</td>
 		<td >${student.bOd}</td>
 		<td >${student.phone}</td>
@@ -45,7 +45,7 @@ function createRowStudent(student)
 				title="Delete"></i>
 		</button>
 		<form action="/courses" class="form-inline" style="display: inline;">
-		<input type="hidden" name="id" th:value="${student.id}"/>
+		<input type="hidden" name="id" value="${student.id}"/>
 		<button class="btn button-style view" onclick=""  type="submit">
 			<i class="far fa-eye"></i>
 		</button>
