@@ -52,7 +52,7 @@ function createRowStudent(student)
 		</form>	
 		
 		<button class="btn button-style view" data-toggle="modal"
-			 th:data-student-id="${student.id}"
+			 data-student-id="${student.id}"
 			data-target="#modal-edit" type="button">
 			<i class="fas fa-pen" style="color: blue;"></i>
 		</button>
