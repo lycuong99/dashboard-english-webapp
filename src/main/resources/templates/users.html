@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Dashboard - Admin</title>
+<style>
+    .input-group-invalid {
+        border-bottom: 1px solid #dc3545;
+    }
+</style>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container-fluid">
+        <h1 class="mt-4">Dashboard</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+
+
+        <div class="card mb-4">
+            <div class="card-body table-responsive">
+
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h2>
+                                    Quản lí <b>User</b>
+                                </h2>
+                            </div>
+                            <div class="col-sm-8">
+                                <button type="button" class="btn btn-light"
+                                        data-toggle="modal" data-target="#modal-insert">
+                                    <i class="fas fa-plus-circle"></i><span>Thêm User</span>
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <table class="table table-hover table-striped"
+                           id="dataTableUser" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Quản lí cơ sở</th>
+                            <!--												<th>Ngày nhập học</th>-->
+                            <th>Tác Vụ</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>Username</th>
+                            <th>Quản lí cơ sở</th>
+                            <!--												<th>Ngày nhập học</th>-->
+                            <th>Tác Vụ</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <!-- 	<tr th:hidden="${students.size() != 0}" id="noRecordTD">
+                            <td colspan="100%">No record</td>
+                        </tr> -->
+
+
+                        <tr th:each="user, status: ${users}"
+                            th:id="${'tr_'+user.username}">
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.role}"></td>
+                            <!--												<td th:text="${student.admissionDate}"></td>-->
+                            <td style="width: 130px;">
+                                <button class="btn delete" data-toggle="modal"
+                                        data-target="#delModal" th:data-delid="${user.username}"
+                                        th:data-delname="${user.username}">
+                                    <i class="fas fa-trash" data-toggle="tooltip"
+                                       title="Delete"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!--Modals Section-->
+    <!-- Delete Modal -->
+    <div class="modal fade" id="delModal" tabindex="-1" role="dialog"
+         aria-labelledby="delModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="delForm" method="post" action="">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger" id="delModalLabel">Xóa
+                           User?</h5>
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Bạn có chắc chắn muốn xóa <b id="delname"></b>?
+                        </p>
+                        <input id="delid" type="hidden" name="id"> <input
+                            type="hidden" name="delrequest">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">Hủy
+                            bỏ</button>
+                        <button id="del_btn" type="button" class="btn btn-danger">Đồng
+                            ý xóa</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--Insert Student Modal  -->
+    <div id="modal-insert" class="modal " role="dialog"
+         data-backdrop="static" data-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="false">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content-form">
+                <div class="modal-content" id="modal-content">
+
+                    <div class="modal-header">
+                        <h3>THÊM USER</h3>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <script >
+                                            function validateForm()
+                                            {
+                                                let password = document.forms["password-form"]["newPassword"];
+                                                let confirm = document.forms["password-form"]["confirmPassword"];
+                                                console.log(password.value);
+                                                 console.log(confirm.value);
+                                                if(password.value != confirm.value) {
+                                                confirm.setCustomValidity("Mật Khẩu không khớp");
+                                                return false;
+                                                 }
+                                                  confirm.setCustomValidity('');
+                                                 return true;
+
+                                            }
+                                        </script>
+                        <form method="POST" enctype="multipart/form-data" onsubmit="return false;"
+                              id="user-create-form">
+                            <div class="form-row ">
+                                <div class="input-group">
+                                    <input name="username" type="text"
+                                            class="form-control input--style-2"
+                                           pattern="^[a-zA-Z][a-z0-9_-]{2,15}$"
+                                           title="Username phải bắt đầu bằng chữ và chứa 3-16 kí tự"
+                                           aria-describedby="validationServerUsernameFeedback"
+                                            placeholder="Username" required="required"/>
+                                    <div class="invalid-tooltip">
+                                       Username đã tồn tại
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="form-row ">
+                                <div class="input-group">
+                                    <select class="custom-select select-style-1" name="campus" id="calDateSelect" required>
+                                        <option value="" selected disabled class="input--style-2">Chọn cơ sở quản lí</option>
+                                        <option th:value="${campus.id}" th:text="${campus.id}" class="input--style-2" th:each="campus, status: ${session.campuses}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="input-group ">
+
+                                    <input name="password" type="password"
+                                           class="form-control input--style-2" placeholder="Mật khẩu"
+                                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                           title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="input-group">
+                                    <input name="confirm" type="password"
+                                           class="form-control input--style-2" placeholder="Xác nhận mật khẩu"
+                                           required="required" title="Phải khớp với mật khẩu" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit"
+                                class="button-cancel-style btn btn-outline-secondary"
+                                data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-success" type="button" id="btn-modal-insert" form="user-create-form">Save
+                            changes</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+					$('#delModal').on('show.bs.modal', function(event) {
+						var delbutton = $(event.relatedTarget);
+						var delid = delbutton.data('delid');
+						var delname = delbutton.data('delname');
+						var delmodal = $(this);
+						delmodal.find('.modal-body #delid').val(delid);
+						delmodal.find('.modal-body #delname').text(delname);
+					});
+
+					$('#delForm').on('submit', function() {
+						$('#del_btn').prop('disabled', true);
+						$('#del_btn').html('&#9203; Đang xóa');
+					});
+				</script>
+
+</main>>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+<!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>-->
+    <script type="text/javascript" th:src="@{/js/module.js}"></script>
+
+    <script  type="text/javascript" th:src="@{/js/users.js}"></script>
+</th:block>
+
+<!-- 	<script
+src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
+crossorigin="anonymous"></script> -->
+
+
+
+</body>
+</html>

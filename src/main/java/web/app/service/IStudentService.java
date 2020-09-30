@@ -13,10 +13,8 @@ import web.app.entity.Student;
 public interface IStudentService {
 	
 	public List<Student> getAllStudents();
-	public List<Student> getStudents(String campus);
-	public Page<Student> getStudents(Pageable pageable, String campus);
-	public Page<Student> getStudents(Pageable pageable, String campus, String keySearch);
-	
+	public List<Student> getStudents(int campus);
+
 	public StudentDTO getStudent(Integer id);
 	
 	public void getCourse(int studentId);

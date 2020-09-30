@@ -1,43 +1,37 @@
-  
+
 //////////////////////////////////////////////////        DATE FUNCTION         ////////////////////////////////////////////////
 $(".inputRangeDate").daterangepicker({
-    autoUpdateInput: false,
+    autoUpdateInput: true,
+    showDropdowns: true,
     locale: {
+      "format": "DD/MM/YYYY",
+        "separator": " - ",
         cancelLabel: 'Clear'
     }
 });
 
-$(".inputRangeDate").on('apply.daterangepicker', function(ev, picker) {
+$("#inputRangeDate").on('apply.daterangepicker', function(ev, picker) {
     $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+    $("#report-form").find("input[name='startDate']").val(picker.startDate.format('DD/MM/YYYY'));
+     $("#report-form").find("input[name='endDate']").val(picker.endDate.format('DD/MM/YYYY'));
 });
 
-$(".inputRangeDate").on('cancel.daterangepicker', function(ev, picker) {
+$("#inputRangeDate").on('cancel.daterangepicker', function(ev, picker) {
     $(this).val('');
+     $("#report-form").find("input[name='startDate']").val('');
+     $("#report-form").find("input[name='endDate']").val('');
 });
 
 
-function getSchedules(form) {
-    let schedules = [];
-    $.each($(`#${form}`).find("input[name='schedule']:checked"), function () {
-        schedules.push(parseInt($(this).val()));
-    });
-    return schedules;
-}
 
 function getFormValue(formId, nameField) {
     let form = $(`#${formId}`);
     return form.find(`input[name="${nameField}"]`).val();
 }
 
-$("#calDateSelect").change(function () {
-    var valSelect = $(this).val();
-    if (valSelect == 1) {
-        $("#select1").show();
-        $("#select2").hide();
-    } else {
-        $("#select1").hide();
-        $("#select2").show();
-    }
+$("#inputRangeDate").change(function () {
+   $("#report-form").find("input[name='startDate']").val($(this).data('daterangepicker').startDate.format('DD/MM/YYYY'));
+   $("#report-form").find("input[name='endDate']").val($(this).data('daterangepicker').endDate.format('DD/MM/YYYY'));
 });
 
 $("#calDateSelect_edit").change(function () {
@@ -94,37 +88,37 @@ function getEndDate(form) {
 
     if($('.startDateSelect').val()==""){
         return null;
-    } 
+    }
      //get Day in Week of startDate
      let dayOfStartDate = startDate.getDay();
     //  console.log(dayOfStartDate);
- 
+
      let totalLesson = parseInt(getFormValue(form.attr("id"), 'totalLesson'));
      let schedules = getSchedules(form.attr("id"));
      schedules.sort();
      let totalLessonInWeek = schedules.length;
     //  console.log('totalLesson:'+totalLesson);
     //  console.log(schedules);
-     
+
      if (totalLessonInWeek > 0 && totalLesson > 0 && totalLesson >= totalLessonInWeek) {
          let startDay =  getStartDayReal(dayOfStartDate, schedules);
          let endDayInWeek = getEndDay(startDay, schedules, totalLesson);
          console.log(startDay + " --> " +endDayInWeek);
          let endDate;
- 
+
          let noWeek = getNoWeek(startDay, schedules, totalLesson);
- 
+
          // Case startDate in nextweek - dayOfStartDate
          if(dayOfStartDate > startDay)
          {
              noWeek++;
          }
-         
+
          console.log("Week: "+noWeek);
- 
-         let starDateMoment = moment(startDate);          
+
+         let starDateMoment = moment(startDate);
          endDate = starDateMoment.add(endDayInWeek - dayOfStartDate + 7*noWeek, 'days');
- 
+
          console.log(endDate.format('YYYY-MM-DD'));
          return endDate;
      }
@@ -143,11 +137,11 @@ function updateEndDate(form) {
 ///////////////////////        THAO TAC VOI ROW         ////////////////////////////
 
 
-function deleteRow(trId, tableId) {       	
+function deleteRow(trId, tableId) {
   	let rowDel = $(document.getElementById(trId));
   	let table = $("#"+tableId).DataTable();
   	table.row(rowDel).remove().draw();
-  	
+
   };
 
 function delStudent(id) {
@@ -327,14 +321,14 @@ $(document).ready(function() {
         isClick = 0;
         $(this).val(picker.startDate.format('DD/MM/YYYY'));
         updateEndDate($(this).closest("form"));
-    
+
     });
 
     $('.startDateSelect').on('input', function()
     {
         console.log('change');
     });
-    
+
     /*   CRUD   */
     //----------------DELETE---------------------
 	$("#del_btn").click(function() {
@@ -343,7 +337,7 @@ $(document).ready(function() {
 		console.log("delete" + id);
 		delStudent(id);
 	});
-	
+
 	//-----------------INSERT-----------------------
 	$('#btn-modal-insert').click(
 		    function () {
@@ -362,7 +356,7 @@ $(document).ready(function() {
 		        let endDate;
 		        let schedules;
 		        let isHaveSchedule = false;
-		        
+
 		        let valueSelect = $("#calDateSelect").val();
 
 		        let courseData = {

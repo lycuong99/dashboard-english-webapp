@@ -29,23 +29,11 @@ public class StudentServiceImpl implements IStudentService{
 	}
 
 	@Override
-	public List<Student> getStudents(String campus) {
-		List<Student> results = studentRepo.findAllByCampus(campus);
+	public List<Student> getStudents(int campus) {
+		List<Student> results = studentRepo.findAllByCampusId(campus);
 		return results;
 	}
 
-	@Override
-	public Page<Student> getStudents(Pageable pageable, String campus) {
-		
-		Page<Student> results = studentRepo.findAllByCampus(campus, pageable);
-		return results;
-	}
-
-	@Override
-	public Page<Student> getStudents(Pageable pageable, String campus, String keySearch) {
-		Page<Student> results = studentRepo.findAllByCampusAndNameContainingOrPhoneContaining(campus, pageable, keySearch, keySearch);
-		return results;
-	}
 
 	@Override
 	public void getCourse(int studentId) {
@@ -99,7 +87,7 @@ public class StudentServiceImpl implements IStudentService{
 			entity = studentRepo.getOne(dto.getId());
 			
 			entity.setbOd(dto.getbOd());
-			entity.setCampus(dto.getCampus());
+			entity.setCampusInt(dto.getCampus());
 			entity.setName(dto.getName());
 			entity.setNameParent(dto.getNameParent());
 			entity.setNote(dto.getNote());

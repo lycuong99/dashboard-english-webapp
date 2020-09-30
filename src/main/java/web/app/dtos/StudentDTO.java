@@ -2,15 +2,21 @@ package web.app.dtos;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import web.app.entity.Campus;
 import web.app.entity.Course;
+
+import javax.xml.bind.annotation.XmlTransient;
 
 public class StudentDTO {
 	private Integer id;
 	private String name;
 	private String nameParent;
-	private String className;
+	private Integer className;
 	private String bOd;
-	private String campus;
+	private Integer campus;
 	private String admissionDate;
 	private String note;
 	private String phone;
@@ -42,10 +48,10 @@ public class StudentDTO {
 	public void setNameParent(String nameParent) {
 		this.nameParent = nameParent;
 	}
-	public String getClassName() {
+	public Integer getClassName() {
 		return className;
 	}
-	public void setClassName(String className) {
+	public void setClassName(Integer className) {
 		this.className = className;
 	}
 	public String getbOd() {
@@ -54,12 +60,18 @@ public class StudentDTO {
 	public void setbOd(String bOd) {
 		this.bOd = bOd;
 	}
-	public String getCampus() {
+	public Integer getCampus() {
 		return campus;
 	}
-	public void setCampus(String campus) {
+
+	public void setCampus(Integer campus) {
 		this.campus = campus;
 	}
+
+	public void setCampusObj(Campus campus) {
+		this.campus = campus.getId();
+	}
+
 	public String getAdmissionDate() {
 		return admissionDate;
 	}

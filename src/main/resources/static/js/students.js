@@ -29,41 +29,108 @@ function delStudent(id) {
 
 function createRowStudent(student)
 {
-	let row = `<tr id="${'tr_'+student.id}">
-		<td >${student.id}</td>
-		<td >${student.name}</td>
-		<td th:text="${student.note}"></td>
-		<td >${student.className}</td>
-		<td >${student.bOd}</td>
-		<td >${student.phone}</td>
-		<td >${student.admissionDate}</td>
-		<td style="wid 130px;">
-				<button class="btn delete" data-toggle="modal"
-			data-target="#delModal" th:data-delid="${student.id}"
-			th:data-delname="${student.name}">
-			<i class="fas fa-trash" data-toggle="tooltip"
-				title="Delete"></i>
-		</button>
-		<form action="/courses" class="form-inline" style="display: inline;">
-		<input type="hidden" name="id" value="${student.id}"/>
-		<button class="btn button-style view" onclick=""  type="submit">
-			<i class="far fa-eye"></i>
-		</button>
-		</form>	
-		
-		<button class="btn button-style view" data-toggle="modal"
-			 th:data-student-id="${student.id}"
-			data-target="#modal-edit" type="button">
-			<i class="fas fa-pen" style="color: blue;"></i>
-		</button>
-	</tr>`;
+//	let row = `<tr id="${'tr_'+student.id}">
+//		<td >${student.id}</td>
+//		<td >${student.name}</td>
+//		<td th:text="${student.note}"></td>
+//		<td >${student.className}</td>
+//		<td >${student.bOd}</td>
+//		<td >${student.phone}</td>
+//		<td >${student.admissionDate}</td>
+//		<td style="wid 130px;">
+//				<button class="btn delete" data-toggle="modal"
+//			data-target="#delModal" th:data-delid="${student.id}"
+//			th:data-delname="${student.name}">
+//			<i class="fas fa-trash" data-toggle="tooltip"
+//				title="Delete"></i>
+//		</button>
+//		<form action="/courses" class="form-inline" style="display: inline;">
+//		<input type="hidden" name="id" value="${student.id}"/>
+//		<button class="btn button-style view" onclick=""  type="submit">
+//			<i class="far fa-eye"></i>
+//		</button>
+//		</form>
+//
+//		<button class="btn button-style view" data-toggle="modal"
+//			 data-student-id="${student.id}"
+//			data-target="#modal-edit" type="button">
+//			<i class="fas fa-pen" style="color: blue;"></i>
+//		</button>
+//	</tr>`;
+
+	let rowData = [
+	    student.id,
+	    student.name,
+	    student.note,
+	    student.className,
+	    student.bOd,
+	    student.phone,
+//	    student.admissionDate,
+	    `<button class="btn delete" data-toggle="modal"
+         			data-target="#delModal" th:data-delid="${student.id}"
+         			th:data-delname="${student.name}">
+         			<i class="fas fa-trash" data-toggle="tooltip"
+         				title="Delete"></i>
+         		</button>
+         		<form action="/courses" class="form-inline" style="display: inline;">
+         		<input type="hidden" name="id" value="${student.id}"/>
+         		<button class="btn button-style view" onclick=""  type="submit">
+         			<i class="far fa-eye"></i>
+         		</button>
+         		</form>
+
+         		<button class="btn button-style view" data-toggle="modal"
+         			 data-student-id="${student.id}"
+         			data-target="#modal-edit" type="button">
+         			<i class="fas fa-pen" style="color: blue;"></i>
+         		</button>`
+	];
+
 	return row;
+}
+
+function createRowDataStudent(student)
+{
+let rowData = [
+	    student.id,
+	    student.name,
+	    student.note,
+	    student.className,
+	    student.bOd,
+	    student.phone,
+//	    student.admissionDate,
+	    `<button class="btn delete" data-toggle="modal"
+         			data-target="#delModal" data-delid="${student.id}"
+         			data-delname="${student.name}">
+         			<i class="fas fa-trash" data-toggle="tooltip"
+         				title="Delete"></i>
+         		</button>
+         		<form action="/courses" class="form-inline" style="display: inline;">
+         		<input type="hidden" name="id" value="${student.id}"/>
+         		<button class="btn button-style view" onclick=""  type="submit">
+         			<i class="far fa-eye"></i>
+         		</button>
+         		</form>
+
+         		<button class="btn button-style view" data-toggle="modal"
+         			 data-student-id="${student.id}"
+         			data-target="#modal-edit" type="button">
+         			<i class="fas fa-pen" style="color: blue;"></i>
+         		</button>`
+	];
+	return rowData;
 }
 
 function insertRowStudent(student)
 {
-	let row =  createRowStudent(student);
-	$("#dataTableStudent").find("tbody").prepend(row);
+//	let row =  createRowStudent(student);
+//	$("#dataTableStudent").find("tbody").prepend(row);
+    let rowData = createRowDataStudent(student);
+	let trId = "tr_" + student.id
+//	let row = $(document.getElementById(trId));
+    let table = $("#dataTableStudent").DataTable();
+    let rowNode= table.row.add(rowData).draw().node();
+    $(rowNode).attr('id', trId);
 		
 }
 function editRowStudent(student)
@@ -71,30 +138,48 @@ function editRowStudent(student)
 	let row_old = $(document.getElementById("tr_"+student.id));
 	let row_new =createRowStudent(student);
 	row_old.replaceWith(row_new);
+
+	let trId = "tr_" + student.id;
+	let table = $("#dataTableStudent").DataTable();
+	let rowData = createRowDataStudent(student);
+	table.row($(document.getElementById(trId))).data(rowData).draw();
 }
 
-function setDatatoForm(form,name, value)
-{
-	if(value==null){
-		 value="";
-	};
-	form.elements.namedItem(name).value = value;
-}
+
 
 function showDataToEditModal(student)
 {
 	let form = document.getElementById("student-edit-form");
-	setDatatoForm(form,"id", student.id);
-	setDatatoForm(form,"name", student.name);
-	setDatatoForm(form,"className", student.className);
-	setDatatoForm(form,"phone", student.phone);
-	setDatatoForm(form,"nameParent", student.nameParent);
-	setDatatoForm(form,"note", student.note);
+	setDataToForm(form,"id", student.id);
+	setDataToForm(form,"name", student.name);
+	setDataToForm(form,"className", student.className);
+	setDataToForm(form,"phone", student.phone);
+	setDataToForm(form,"nameParent", student.nameParent);
+	setDataToForm(form,"note", student.note);
 	console.log("BOD:"+student.bOd);
-	setDatatoForm(form,"bOd", student.bOd);
+	setDataToForm(form,"bOd", student.bOd);
 }
 
+//		--------------- VALIDATE ------------------
+    function isValidateForm(formId)
+    {
+        var form = document.forms[formId];
 
+        var inputName = form["name"];
+        var inputPhone = form["phone"];
+
+       	if (!inputName.checkValidity()) {
+            alert("Vui lòng điền tên học sinh");
+            return false;
+        }
+
+       	if (!inputPhone.checkValidity()) {
+            alert("SĐT phải bao gồm 10 số theo format xxx-xxx-xxxx");
+            return false;
+        }
+
+        return true;
+    }
 
 
 $(document)
@@ -114,6 +199,9 @@ $(document)
 // Insert Student
 			$("#btn-modal-insert").click(function()
 					{
+
+					 if(isValidateForm('student-create-form') == false) return;
+
 				let formData = new FormData($('form#student-create-form')[0]);
 				let data ={
 						name: formData.get('name'),
@@ -129,7 +217,7 @@ $(document)
 				
 				$.ajax({
 					type : 'PUT',
-					url : "/student-api/insert/",
+					url : "/student-api/insert",
 					data: JSON.stringify(data),
 					contentType : 'application/json',
 					dataType: 'json',
@@ -137,6 +225,7 @@ $(document)
 						/* alert("modify success!"); */
 					insertRowStudent(result);
 						$('#modal-insert').modal('hide');
+						$("#student-create-form").trigger('reset');
 					},
 					error : function(e) {
 						alert("Modify not success!");
@@ -145,10 +234,11 @@ $(document)
 					});
 			
 			$('#modal-edit').on('show.bs.modal', function(event) {
+                modalLoading($('#modal-edit'), false);
+
 				let editbutton = $(event.relatedTarget);
 				let studentId = editbutton.data('student-id');
-				var delmodal = $(this);
-				
+
 				console.log("get data");
 				
 				$.ajax({
@@ -159,6 +249,7 @@ $(document)
 						/* alert("modify success!"); */
 						console.log(result);
 					showDataToEditModal(result);
+					modalLoading($('#modal-edit'), true);
 						$('#modal-edit').modal('show');
 					},
 					error : function(e) {
@@ -170,6 +261,9 @@ $(document)
 			
 			$("#btn-modal-update").click(function()
 					{
+					let formId = 'student-edit-form';
+					 if(isValidateForm('student-edit-form') == false) return;
+
 				let formData = new FormData($('form#student-edit-form')[0]);
 				let data ={
 						id:formData.get('id'),
@@ -192,8 +286,9 @@ $(document)
 					dataType: 'json',
 					success : function(result, status) {
 						/* alert("modify success!"); */
-					editRowStudent(result);
+					    editRowStudent(result);
 						$('#modal-edit').modal('hide');
+						$("#student-edit-form").trigger('reset');
 					},
 					error : function(e) {
 						console.log(e);
@@ -203,5 +298,8 @@ $(document)
 					});
 		
 		});
+
+
+
 
 

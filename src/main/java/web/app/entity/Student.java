@@ -2,15 +2,7 @@ package web.app.entity;
 
 import java.util.Collection;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,17 +15,21 @@ import lombok.Data;
 @AllArgsConstructor
 public class Student {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	private Integer id;
 	
 	private String phone;
-	private String className;
+	private Integer className;
 	private String name;
 	private String bOd;
-	private String campus;
+//	private String campus;
 	private String admissionDate;
 	private String note;
 	private String nameParent;
+
+	@OneToOne(cascade = CascadeType.DETACH)
+	@JoinColumn(name = "campus_id")
+	private Campus campus;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -42,7 +38,7 @@ public class Student {
 	public Student() {
 		
 	}
-	public Student(String phone, String className, String name, String bOd, String campus, String admissionDate,
+	public Student(String phone, int className, String name, String bOd, Campus campus, String admissionDate,
 			String note) {
 		this.phone = phone;
 		this.className = className;
@@ -72,10 +68,10 @@ public class Student {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	public String getClassName() {
+	public Integer getClassName() {
 		return className;
 	}
-	public void setClassName(String className) {
+	public void setClassName(Integer className) {
 		this.className = className;
 	}
 	public String getName() {
@@ -90,12 +86,7 @@ public class Student {
 	public void setbOd(String bOd) {
 		this.bOd = bOd;
 	}
-	public String getCampus() {
-		return campus;
-	}
-	public void setCampus(String campus) {
-		this.campus = campus;
-	}
+
 	public String getAdmissionDate() {
 		return admissionDate;
 	}
@@ -114,6 +105,16 @@ public class Student {
 	public void setCourses(Collection<Course> courses) {
 		this.courses = courses;
 	}
-	
-	
+
+	public Campus getCampus() {
+		return campus;
+	}
+
+	public void setCampus(Campus campus) {
+		this.campus = campus;
+	}
+
+	public void setCampusInt(Integer campus) {
+		this.campus = new Campus(campus);
+	}
 }

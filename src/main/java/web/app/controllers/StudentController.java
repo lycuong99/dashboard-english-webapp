@@ -1,5 +1,6 @@
 package web.app.controllers;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import web.app.dtos.StudentDTO;
 import web.app.entity.Course;
 import web.app.entity.Student;
 import web.app.service.IStudentService;
+import web.app.service.LoginService;
 
 @Controller
 public class StudentController {
@@ -25,15 +27,26 @@ public class StudentController {
 	@Autowired
 	IStudentService studentService;
 	
-	
-	@RequestMapping("/")
-	public String homePage(Model model, @RequestParam(defaultValue = "", required = false, name = "key") String key)
+	@Autowired
+	LoginService userDetailService;
+
+	@RequestMapping({"/","/students", "/admin"})
+	public String homePage(Model model, @RequestParam(required = false, name = "campus", defaultValue = "1") Integer campus, Principal principalUser)
 	{
-		String campus = "1";
-//		Page<Student> students = studentService.getStudents(PageRequest.of(0, 100), campus, key);
+
+		try {
+			String role = userDetailService.getRoleByUsername(principalUser.getName());
+
+			if(!role.equalsIgnoreCase("admin")){
+				campus = Integer.parseInt(role);
+			}
+		}catch (Exception ex){
+			return "/500";
+		}
+
 		List<Student> students = studentService.getStudents(campus);
-		model.addAttribute("key", key);
 		model.addAttribute("students", students);
+		model.addAttribute("current_campus", campus);
 		return "index";
 	}
 	
@@ -46,11 +59,16 @@ public class StudentController {
 		return "student-detail";
 	}
 	
-	@RequestMapping("/admin")
-	public String admin()
-	{
-		return "index";
-	}
+//	@RequestMapping("/admin")
+//	public String admin(Model model, @RequestParam(defaultValue = "", required = false, name = "key") String key)
+//	{
+//		String campus = "1";
+////	Page<Student> students = studentService.getStudents(PageRequest.of(0, 100), campus, key);
+//		List<Student> students = studentService.getStudents(campus);
+//		model.addAttribute("key", key);
+//		model.addAttribute("students", students);
+//		return "index";
+//	}
 	
 	@RequestMapping("/courses/{id}")
 	public String getCourses(Model model, @PathVariable("id") Integer id)
@@ -58,5 +76,10 @@ public class StudentController {
 		StudentDTO dto =  studentService.getStudent(id);
 		List<Course> courses = dto.getCourses();
 		return "courses";
+	}
+	@RequestMapping("/403")
+	public String accessDenied() {
+		System.out.println("1212122");
+		return "401";
 	}
 }

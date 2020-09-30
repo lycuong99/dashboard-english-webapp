@@ -54,7 +54,7 @@
 												<th>Lớp</th>
 												<th>Ngày sinh</th>
 												<th>SĐT Phụ Huynh</th>
-												<th>Ngày nhập học</th>
+<!--												<th>Ngày nhập học</th>-->
 												<th>Tác Vụ</th>
 											</tr>
 										</thead>
@@ -66,7 +66,7 @@
 												<th>Lớp</th>
 												<th>Ngày sinh</th>
 												<th>SĐT Phụ Huynh</th>
-												<th>Ngày nhập học</th>
+<!--												<th>Ngày nhập học</th>-->
 												<th>Tác Vụ</th>
 											</tr>
 										</tfoot>
@@ -74,7 +74,6 @@
 											<!-- 	<tr th:hidden="${students.size() != 0}" id="noRecordTD">
 												<td colspan="100%">No record</td>
 											</tr> -->
-
 
 											<tr th:each="student, status: ${students}"
 												th:id="${'tr_'+student.id}">
@@ -84,7 +83,7 @@
 												<td th:text="${student.className}"></td>
 												<td th:text="${student.bOd}"></td>
 												<td th:text="${student.phone}"></td>
-												<td th:text="${student.admissionDate}"></td>
+<!--												<td th:text="${student.admissionDate}"></td>-->
 												<td style="width: 130px;">
 
 													<button class="btn delete" data-toggle="modal"
@@ -175,7 +174,7 @@
 											</div>
 											<div class="input-group col-md-4">
 
-												<input name="className"
+												<input name="className" type="number" min="0"
 													class="form-control input--style-2" placeholder="Lớp"
 													required="required" title="" />
 											</div>
@@ -186,14 +185,14 @@
 												<input name="nameParent"
 													class="form-control input--style-2"
 													placeholder="Họ tên phụ huynh" required="required"
-													title="Name is required" />
+													 />
 											</div>
 											<div class="input-group col-md-4">
 
 												<input  name="phone"
 													class="form-control input--style-2"
-													placeholder="SĐT phụ huynh" required="required"
-													title="Name is required" />
+													placeholder="SĐT phụ huynh" required="required" type="tel" pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}"
+													 />
 											</div>
 										</div>
 										<div class="form-row ">
@@ -202,15 +201,16 @@
 												<input  name="bOd" readonly
 													class="form-control input--style-2 js-datepicker"
 													placeholder="Ngày sinh" required="required"
-													title="Name is required" /> <i
+													 /> <i
 													class="fas fa-calendar-alt input-icon js-btn-calendar"></i>
 											</div>
 											<div class="form-group col-md-4">
 
-												<input name="campus"
+												<input type="text"
 													class="form-control input--style-2" placeholder="Cơ sở"
-													value="1" required="required" readonly
-													title="Name is required" />
+													   th:value="${'Cơ sở '+current_campus}" required="required" readonly
+													 />
+												<input type="hidden" name="campus" th:value="${current_campus}">
 											</div>
 										</div>
 										<div class="form-row ">
@@ -228,7 +228,7 @@
 									<button type="submit"
 										class="button-cancel-style btn btn-outline-secondary"
 										data-dismiss="modal">Cancel</button>
-									<button class="btn btn-success" id="btn-modal-insert">Save
+									<button class="btn btn-success" type="submit" id="btn-modal-insert">Save
 										changes</button>
 								</div>
 
@@ -243,7 +243,7 @@
 					<div class="modal-dialog modal-lg">
 						<!-- Modal content-->
 						<div class="modal-content-form">
-							<div class="modal-content" id="modal-content">
+							<div class="modal-content" >
 
 								<div class="modal-header">
 									<h3>SỬA HỌC SINH</h3>
@@ -251,6 +251,13 @@
 								</div>
 
 								<div class="modal-body">
+									<div class="modal-loading">
+										<div class="d-flex justify-content-center" style="    align-items: center; ">
+											<div class="spinner-border" style="width: 4rem; height: 4rem;" role="status">
+												<span class="sr-only">Loading...</span>
+											</div>
+										</div>
+									</div>
 									<form method="POST" enctype="multipart/form-data" 
 										id="student-edit-form">
 										<div class="form-row ">
@@ -262,7 +269,7 @@
 											</div>
 											<div class="input-group col-md-4">
 
-												<input name="className"
+												<input name="className" type="number" min="0"
 													class="form-control input--style-2" placeholder="Lớp"
 													required="required" title="" />
 											</div>
@@ -273,14 +280,14 @@
 												<input name="nameParent"
 													class="form-control input--style-2"
 													placeholder="Họ tên phụ huynh" required="required"
-													title="Name is required" />
+													 />
 											</div>
 											<div class="input-group col-md-4">
 
 												<input  name="phone"
-													class="form-control input--style-2"
+													class="form-control input--style-2" pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}"
 													placeholder="SĐT phụ huynh" required="required"
-													title="Name is required" />
+													 />
 											</div>
 										</div>
 										<div class="form-row ">
@@ -289,15 +296,15 @@
 												<input name="bOd" readonly
 													class="form-control input--style-2 js-datepicker"
 													placeholder="Ngày sinh" required="required"
-													title="Name is required" /> <i
+													 /> <i
 													class="fas fa-calendar-alt input-icon js-btn-calendar"></i>
 											</div>
 											<div class="form-group col-md-4">
 
 												<input  name="campus"
 													class="form-control input--style-2" placeholder="Cơ sở"
-													value="1" required="required" readonly
-													title="Name is required" />
+													th:value="${'Cơ sở '+current_campus}" required="required" readonly
+													 />
 											</div>
 										</div>
 										<div class="form-row ">
@@ -338,10 +345,16 @@
 						$('#del_btn').html('&#9203; Đang xóa');
 					});
 				</script>
-				<script th:src="@{/js/students.js}"></script>
+				
 			</main>>
 	
-	
+	<th:block layout:fragment="script">
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+		<script type="text/javascript" th:src="@{/js/module.js}"></script>
+	<script th:src="@{/js/scripts.js}"></script>
+	<script  type="text/javascript" th:src="@{/js/students.js}"></script>
+       </th:block>	
 
 	<!-- 	<script
 	src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"

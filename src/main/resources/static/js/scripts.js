@@ -29,7 +29,7 @@
             "autoUpdateInput": false,
             locale: {
                 format: 'DD/MM/YYYY'
-            },
+            }
         });
     
         var myCalendar = $('.js-datepicker');
@@ -65,7 +65,6 @@
             e.stopPropagation();
         });
     
-
 
     } catch(er) {console.log(er);}
 })(jQuery);

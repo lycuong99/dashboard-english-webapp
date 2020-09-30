@@ -1,13 +1,11 @@
 package web.app.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,16 +14,21 @@ public class Course {
 	@Id
 	@GeneratedValue
 	private int id;
-	
 
+	private int classCourse = 0;
 	private String name;
 	private double fee;
 	private String dateStart;
 	private String dateEnd;
 	private String dateRegis;
-	private int totalLession;
+	private int totalLesson;
+	private String note;
+
+	@ElementCollection
+	@CollectionTable(name = "schedules")
+	private List<Integer> schedules = new ArrayList<>();
 	
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "student_id")
 	private Student student;
 		
@@ -34,24 +37,40 @@ public class Course {
 		
 	}
 	
-	public Course(String name, double fee, String dateStart, String dateEnd, String dateRegis, int totalLession,
+	public Course(String name, double fee, String dateStart, String dateEnd, String dateRegis, int totalLesson,
 			Student student) {
 		this.name = name;
 		this.fee = fee;
 		this.dateStart = dateStart;
 		this.dateEnd = dateEnd;
 		this.dateRegis = dateRegis;
-		this.totalLession = totalLession;
+		this.totalLesson = totalLesson;
 		this.student = student;
 	}
 	
-	public Course(String name, double fee, String dateStart, String dateEnd, String dateRegis, int totalLession) {
+	public Course(String name, double fee, String dateStart, String dateEnd, String dateRegis, int totalLesson) {
 		this.name = name;
 		this.fee = fee;
 		this.dateStart = dateStart;
 		this.dateEnd = dateEnd;
 		this.dateRegis = dateRegis;
-		this.totalLession = totalLession;
+		this.totalLesson = totalLesson;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public List<Integer> getSchedules() {
+		return schedules;
+	}
+
+	public void setSchedules(List<Integer> schedules) {
+		this.schedules = schedules;
 	}
 
 	public Student getStudent() {
@@ -99,11 +118,19 @@ public class Course {
 	public void setDateRegis(String dateRegis) {
 		this.dateRegis = dateRegis;
 	}
-	public int getTotalLession() {
-		return totalLession;
+	public int getTotalLesson() {
+		return totalLesson;
 	}
-	public void setTotalLession(int totalLession) {
-		this.totalLession = totalLession;
+	public void setTotalLesson(int totalLession) {
+		this.totalLesson = totalLession;
+	}
+
+	public int getClassCourse() {
+		return classCourse;
+	}
+
+	public void setClassCourse(int classCourse) {
+		this.classCourse = classCourse;
 	}
 	
 	

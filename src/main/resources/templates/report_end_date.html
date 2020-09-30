@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <link>
+    <title>Dashboard - SB Admin</title>
+
+    <base href="/">
+    <style>
+.field {
+	text-align: right;
+	color: grey;
+}
+
+.row {
+	height: 40px;
+}
+
+    </style>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container-fluid">
+        <h1 class="mt-4" >Báo cáo thời gian kết thúc khóa học</h1>
+        <div class="card mb-4">
+            <div class="card">
+                <div class="card-header">Thông tin truy cứu</div>
+
+                <div class="card-body">
+                    <form action="/report_end_date" method="POST" class="form-inline" id="report-form">
+                        <div class="input-group col-md-16">
+                            <label for="inputRangeDate" style="margin-bottom: 10px; margin-right: 0.5rem !important;">Ngày bắt đầu - Ngày kết thúc</label>
+                            <input id="inputRangeDate" name="dateRange"
+                                   style="text-align: center; background-color: white; width:340px;"
+                                   class="form-control mb-2 mr-sm-2 inputRangeDate"
+                                   placeholder="Ngày bắt đầu - Ngày kết thúc"
+
+                                   required="required"/>
+                            <input type="hidden" name="startDate" th:value="${startDate}"/>
+                            <input type="hidden" name="endDate" th:value="${endDate}"/>
+                        </div>
+
+                        <div class="input-group" th:if="${session.ROLE} == 'ADMIN'">
+                            <select class="custom-select select-style-1" name="campus" th:value="${campus}" style="margin-bottom:10px; margin-left: 15px; margin-right:10px; " required>
+                                <option value="" selected disabled class="custom-select input--style-2">Chọn cơ sở</option>
+                                <option th:value="${c.id}" th:selected="${c.id}==${campus}" th:text="${c.id}" class="input--style-2" th:each="c, status: ${session.campuses}"></option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                    </form>
+                    <script>
+
+                    </script>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h2>
+                               Kết quả
+                            </h2>
+                        </div>
+                        <div class="col-sm-8">
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <table class="table table-hover table-striped"
+                       id="dataTableEndDate" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>ID Học sinh</th>
+                        <th>Tên học sinh</th>
+                        <th>Lớp</th>
+                        <th>Tên Phụ Huynh</th>
+                        <th>SĐT</th>
+                        <th>ID khóa học</th>
+                        <th>Tên khóa học</th>
+                        <th>Ngày kết thúc</th>
+
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>ID Học sinh</th>
+                        <th>Tên học sinh</th>
+                        <th>Lớp</th>
+                        <th>Tên Phụ Huynh</th>
+                        <th>SĐT</th>
+                        <th>ID khóa học</th>
+                        <th>Tên khóa học</th>
+                        <th>Ngày kết thúc</th>
+
+                    </tr>
+                    </tfoot>
+                    <tbody>
+
+
+                    <tr th:each="dto, status: ${reportDTOs}">
+                        <td th:text="${dto.studentId}"></td>
+                        <td th:text="${dto.studentName}"></td>
+                        <td th:text="${dto.className}"></td>
+                        <td th:text="${dto.nameParent}"></td>
+                        <td th:text="${dto.phone}"></td>
+                        <td th:text="${dto.courseId}"></td>
+                        <td th:text="${dto.nameCourse}"></td>
+                        <td th:text="${dto.dateEnd}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <!--Modals Section-->
+    <!-- Delete Modal -->
+    <div class="modal fade" id="delModal" tabindex="-1" role="dialog"
+         aria-labelledby="delModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="delForm" method="post" action="">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger" id="delModalLabel">Xóa
+                            học sinh?</h5>
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Bạn có chắc chắn muốn xóa <b id="delname"></b>?
+                        </p>
+                        <input id="delid" type="hidden" name="id"> <input
+                            type="hidden" name="delrequest">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">Hủy
+                            bỏ
+                        </button>
+                        <button id="del_btn" type="button" class="btn btn-danger">Đồng
+                            ý xóa
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+					$('#delModal').on('show.bs.modal', function(event) {
+						var delbutton = $(event.relatedTarget);
+						var delid = delbutton.data('delid');
+						var delname = delbutton.data('delname');
+						var delmodal = $(this);
+						delmodal.find('.modal-body #delid').val(delid);
+						delmodal.find('.modal-body #delname').text(delname);
+					});
+
+					$('#delForm').on('submit', function() {
+						$('#del_btn').prop('disabled', true);
+						$('#del_btn').html('&#9203; Đang xóa');
+					});
+
+    </script>
+
+</main>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/module.js}"></script>
+    <script th:src="@{/js/scripts.js}"></script>
+    <script th:src="@{/js/report.js}"></script>
+    <script>
+        let dateFormat = "DD/MM/YYYY";
+        let startDate = '[[${startDate}]]';
+        let endDate = '[[${endDate}]]';
+        if(startDate!='')
+        {
+            $('#report-form').find('.inputRangeDate').val(startDate + ' - ' + endDate);
+
+            $('#report-form').find('.inputRangeDate').data('daterangepicker').startDate = moment(startDate, dateFormat);
+            $('#report-form').find('.inputRangeDate').data('daterangepicker').endDate = moment(endDate, dateFormat);
+        }
+
+    </script>
+</th:block>
+
+</body>
+</html>
