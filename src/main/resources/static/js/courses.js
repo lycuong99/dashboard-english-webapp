@@ -92,7 +92,7 @@ function getEndDate(form) {
 
      let startDate = form.find('.startDateSelect').data('daterangepicker').startDate.toDate();
 
-    if($('.startDateSelect').val()==""){
+    if(form.find('.startDateSelect').val()==""){
         return null;
     } 
      //get Day in Week of startDate
