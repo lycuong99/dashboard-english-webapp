@@ -55,4 +55,5 @@ public class UserController {
         model.addAttribute("isWrongPassword", false);
         return "password";
     }
+
 }

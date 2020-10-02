@@ -51,8 +51,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         http.headers()
                 .frameOptions().sameOrigin().and()
                 .authorizeRequests()
-                    .antMatchers("/login", "/css/**", "**/js/**").permitAll() // Cho phép tất cả mọi người truy cập vào 2 địa chỉ này
-                    .antMatchers("/users").hasRole("ADMIN")
+                .antMatchers("/login", "/css/**", "**/js/**").permitAll() // Cho phép tất cả mọi người truy cập vào 2 địa chỉ này
+
+                .antMatchers("/users").hasRole("ADMIN")
                 .anyRequest().authenticated() // Tất cả các request khác đều cần phải xác thực mới được truy cập
                     .and()
 
@@ -66,8 +67,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                     .and()
 
                 .logout() // Cho phép logout
-                    .permitAll()
-                    .and().exceptionHandling().accessDeniedPage("/403");
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
+                .and().exceptionHandling().accessDeniedPage("/403");
 
 //        http
 //                .addFilterBefore(new JWTLoginFilter("/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
@@ -75,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     }
     
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
     	 web.ignoring().antMatchers("/css/**");
          web.ignoring().antMatchers("/js/**");
          web.ignoring().antMatchers("/images/**");
