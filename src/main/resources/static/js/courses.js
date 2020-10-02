@@ -152,6 +152,9 @@ function deleteRow(trId, tableId) {
 
 function delStudent(id) {
 	$.ajax({
+	headers: {
+    									"X-CSRF-TOKEN": token
+    								},
 		type : 'DELETE',
 		url : "/course-api/delete/" + id,
 		success : function(result, status) {
@@ -226,9 +229,10 @@ function showDataToEditModal(course)
 	setDataToForm(form,"name", course.name);
     setDataToForm(form,"name", course.name);
     setDataToForm(form,"classCourse", course.classCourse);
-     setDataToForm(form,"fee", course.fee);
-     setDataToForm(form,"note", course.note);
-      setDataToForm(form,"totalLesson", course.totalLesson);
+    setDataToForm(form,"fee", course.fee);
+    setDataToForm(form,"note", course.note);
+    setDataToForm(form,"dateRegis", course.dateRegis);
+    setDataToForm(form,"totalLesson", course.totalLesson);
 
     let schedules = course.schedules;
 
@@ -248,13 +252,11 @@ function showDataToEditModal(course)
      $("#calDateSelect_edit").val(2).change();
      $(form).find("input[name='startDate']").data('daterangepicker').startDate = moment(course.dateStart, dateFormat);
      $(form).find("input[name='startDate']").data('daterangepicker').endDate = moment(course.dateStart, dateFormat);
-      $(form).find("input[name='startDate']").val(course.dateStart);
+     $(form).find("input[name='startDate']").val(course.dateStart);
      $(form).find('.endDateResult').text(course.dateEnd);
-
 
      for(let i = 0; i< schedules.length; i++)
      {
-
         $(form).find("input[name='schedule']")[schedules[i]].checked = true;
      }
 
@@ -308,6 +310,7 @@ function showDataToEditModal(course)
     }
 
 $(document).ready(function() {
+var token = $("meta[name='_csrf']").attr("content");
 	/*    DATE     */
 	 //change totalLesstion
     $('input[name="totalLesson"]').blur(function()
@@ -361,6 +364,7 @@ $(document).ready(function() {
 		        let startDate;
 		        let endDate;
 		        let schedules;
+		        let dateRegis = form.find('input[name="dateRegis"]').val();
 		        let isHaveSchedule = false;
 		        
 		        let valueSelect = $("#calDateSelect").val();
@@ -371,7 +375,7 @@ $(document).ready(function() {
 		            classCourse: classCourse,
 		            fee:fee,
 		            totalLesson:totalLesson,
-		            dateRegis: moment().format("DD/MM/YYYY"),
+		            dateRegis: dateRegis,
                     note: note
 		        }
 		        if (valueSelect == 1) {
@@ -388,6 +392,9 @@ $(document).ready(function() {
 
 		        $.ajax({
                 		type : 'PUT',
+                		headers: {
+                        									"X-CSRF-TOKEN": token
+                        								},
                 		url : "/course-api/insert",
                 		data: JSON.stringify(courseData),
                 		contentType : 'application/json',
@@ -420,6 +427,9 @@ $(document).ready(function() {
 
             $.ajax({
                 type : 'GET',
+                headers: {
+                									"X-CSRF-TOKEN": token
+                								},
                 url : "/course-api/get/"+courseId,
                 dataType: 'json',
                 success : function(result, status) {
@@ -456,6 +466,7 @@ $(document).ready(function() {
                		        let startDate;
                		        let endDate;
                		        let schedules;
+               		         let dateRegis = form.find('input[name="dateRegis"]').val();
                		        let isHaveSchedule = false;
 
                		        let valueSelect = $("#calDateSelect_edit").val();
@@ -467,7 +478,7 @@ $(document).ready(function() {
                		            classCourse: classCourse,
                		            fee:fee,
                		            totalLesson:totalLesson,
-               		            dateRegis: moment().format("DD/MM/YYYY"),
+               		            dateRegis: dateRegis,
                                    note: note
                		        }
                		        if (valueSelect == 1) {
@@ -483,6 +494,9 @@ $(document).ready(function() {
 
 
                		        $.ajax({
+               		        headers: {
+                            									"X-CSRF-TOKEN": token
+                            								},
                                		type : 'POST',
                                		url : "/course-api/update",
                                		data: JSON.stringify(courseData),

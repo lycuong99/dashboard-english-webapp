@@ -36,7 +36,7 @@ public class InitDefaultData {
 		campusRepo.saveAndFlush(new Campus(2));
 
 
-		studentRepo.deleteAll();
+//		studentRepo.deleteAll();
 		
 		List<Student> students = new ArrayList<Student>();
 		for (int i = 0; i < 5; i++) {

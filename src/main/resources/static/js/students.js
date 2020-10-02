@@ -10,6 +10,9 @@ function deleteRow(trId) {
 function delStudent(id) {
 
 		$.ajax({
+		headers: {
+        									"X-CSRF-TOKEN": token
+        								},
 			type : 'DELETE',
 			url : "/student-api/delete/" + id,
 			success : function(result, status) {
@@ -185,7 +188,7 @@ function showDataToEditModal(student)
 $(document)
 .ready(
 		function() {
-			
+			var token = $("meta[name='_csrf']").attr("content");
 		/* $("#dataTableStudent").DataTable(); */
 			$("#del_btn").click(
 					function()
@@ -217,6 +220,9 @@ $(document)
 				
 				$.ajax({
 					type : 'PUT',
+					headers: {
+                    									"X-CSRF-TOKEN": token
+                    								},
 					url : "/student-api/insert",
 					data: JSON.stringify(data),
 					contentType : 'application/json',
@@ -243,6 +249,9 @@ $(document)
 				
 				$.ajax({
 					type : 'GET',
+					headers: {
+                    									"X-CSRF-TOKEN": token
+                    								},
 					url : "/student-api/get/"+studentId,
 					dataType: 'json',
 					success : function(result, status) {
@@ -280,6 +289,9 @@ $(document)
 				
 				$.ajax({
 					type : 'POST',
+					headers: {
+                    									"X-CSRF-TOKEN": token
+                    								},
 					url : "/student-api/update",
 					data: JSON.stringify(data),
 					contentType : 'application/json',
