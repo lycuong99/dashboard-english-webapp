@@ -52,7 +52,9 @@ function delUser(id) {
 	$.ajax({
 		type : 'DELETE',
 		url : "/user-api/delete/"+id,
-
+        headers: {
+                                									"X-CSRF-TOKEN": token
+                                								},
 		success : function(result, status) {
 			/* alert("modify success!"); */
 			deleteRow("tr_" + id, "dataTableUser");
@@ -77,6 +79,7 @@ function delUser(id) {
 $(document)
 .ready(
 		function() {
+		var token = $("meta[name='_csrf']").attr("content");
 function validateForm()
  {
      let password = document.forms["password-form"]["newPassword"];
@@ -95,6 +98,9 @@ function validateForm()
 
          $.ajax({
           					type : 'PUT',
+          					headers: {
+                                                    									"X-CSRF-TOKEN": token
+                                                    								},
           					url : "/student-api/insert",
           					data: JSON.stringify(data),
           					contentType : 'application/json',
@@ -157,6 +163,9 @@ function validateForm()
  				$.ajax({
  					type : 'PUT',
  					url : "/user-api/insert",
+ 					headers: {
+                                            									"X-CSRF-TOKEN": token
+                                            								},
  					data: JSON.stringify(data),
  					contentType : 'application/json',
  					dataType: 'json',
