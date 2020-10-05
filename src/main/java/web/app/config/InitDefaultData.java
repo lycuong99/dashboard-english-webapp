@@ -26,7 +26,7 @@ public class InitDefaultData {
 	@EventListener
 	public void appReady(ApplicationReadyEvent event)
 	{
-		 initStudent();
+//		 initStudent();
 		
 	}
 	private void initStudent()
