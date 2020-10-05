@@ -301,10 +301,11 @@
 											</div>
 											<div class="form-group col-md-4">
 
-												<input  name="campus"
+												<input
 													class="form-control input--style-2" placeholder="Cơ sở"
 													th:value="${'Cơ sở '+current_campus}" required="required" readonly
 													 />
+												<input type="hidden" name="campus" th:value="${current_campus}">
 											</div>
 										</div>
 										<div class="form-row ">

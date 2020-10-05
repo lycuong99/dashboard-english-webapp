@@ -7,90 +7,7 @@ function deleteRow(trId) {
 	
 };
 
-function delStudent(id) {
 
-		$.ajax({
-		headers: {
-        									"X-CSRF-TOKEN": token
-        								},
-			type : 'DELETE',
-			url : "/student-api/delete/" + id,
-			success : function(result, status) {
-				/* alert("modify success!"); */
-				deleteRow("tr_" + id);
-				$('#delModal')
-				.modal(
-						'hide');
-			},
-			error : function(e) {
-				alert("Modify not success!");
-			}
-		});
-	
-
-};
-
-function createRowStudent(student)
-{
-//	let row = `<tr id="${'tr_'+student.id}">
-//		<td >${student.id}</td>
-//		<td >${student.name}</td>
-//		<td th:text="${student.note}"></td>
-//		<td >${student.className}</td>
-//		<td >${student.bOd}</td>
-//		<td >${student.phone}</td>
-//		<td >${student.admissionDate}</td>
-//		<td style="wid 130px;">
-//				<button class="btn delete" data-toggle="modal"
-//			data-target="#delModal" th:data-delid="${student.id}"
-//			th:data-delname="${student.name}">
-//			<i class="fas fa-trash" data-toggle="tooltip"
-//				title="Delete"></i>
-//		</button>
-//		<form action="/courses" class="form-inline" style="display: inline;">
-//		<input type="hidden" name="id" value="${student.id}"/>
-//		<button class="btn button-style view" onclick=""  type="submit">
-//			<i class="far fa-eye"></i>
-//		</button>
-//		</form>
-//
-//		<button class="btn button-style view" data-toggle="modal"
-//			 data-student-id="${student.id}"
-//			data-target="#modal-edit" type="button">
-//			<i class="fas fa-pen" style="color: blue;"></i>
-//		</button>
-//	</tr>`;
-
-	let rowData = [
-	    student.id,
-	    student.name,
-	    student.note,
-	    student.className,
-	    student.bOd,
-	    student.phone,
-//	    student.admissionDate,
-	    `<button class="btn delete" data-toggle="modal"
-         			data-target="#delModal" th:data-delid="${student.id}"
-         			th:data-delname="${student.name}">
-         			<i class="fas fa-trash" data-toggle="tooltip"
-         				title="Delete"></i>
-         		</button>
-         		<form action="/courses" class="form-inline" style="display: inline;">
-         		<input type="hidden" name="id" value="${student.id}"/>
-         		<button class="btn button-style view" onclick=""  type="submit">
-         			<i class="far fa-eye"></i>
-         		</button>
-         		</form>
-
-         		<button class="btn button-style view" data-toggle="modal"
-         			 data-student-id="${student.id}"
-         			data-target="#modal-edit" type="button">
-         			<i class="fas fa-pen" style="color: blue;"></i>
-         		</button>`
-	];
-
-	return row;
-}
 
 function createRowDataStudent(student)
 {
@@ -138,9 +55,6 @@ function insertRowStudent(student)
 }
 function editRowStudent(student)
 {
-	let row_old = $(document.getElementById("tr_"+student.id));
-	let row_new =createRowStudent(student);
-	row_old.replaceWith(row_new);
 
 	let trId = "tr_" + student.id;
 	let table = $("#dataTableStudent").DataTable();
@@ -190,6 +104,29 @@ $(document)
 		function() {
 			var token = $("meta[name='_csrf']").attr("content");
 		/* $("#dataTableStudent").DataTable(); */
+		function delStudent(id) {
+
+        		$.ajax({
+        		headers: {
+                									"X-CSRF-TOKEN": token
+                								},
+        			type : 'DELETE',
+        			url : "/student-api/delete/" + id,
+        			success : function(result, status) {
+        				/* alert("modify success!"); */
+        				deleteRow("tr_" + id);
+        				$('#delModal')
+        				.modal(
+        						'hide');
+        			},
+        			error : function(e) {
+        				alert("Modify not success!");
+        			}
+        		});
+
+
+        };
+
 			$("#del_btn").click(
 					function()
 					{
