@@ -34,9 +34,13 @@ $("#calDateSelect").change(function () {
     if (valSelect == 1) {
         $("#select1").show();
         $("#select2").hide();
+        $(this).closest('form').find("input[name='totalLesson']").val(0);
+        $(this).closest('form').find("input[name='totalLesson']").prop('readonly', true);
     } else {
         $("#select1").hide();
         $("#select2").show();
+        $(this).closest('form').find("input[name='totalLesson']").val("");
+        $(this).closest('form').find("input[name='totalLesson']").prop('readonly', false);
     }
 });
 
@@ -45,9 +49,13 @@ $("#calDateSelect_edit").change(function () {
     if (valSelect == 1) {
         $("#select1_edit").show();
         $("#select2_edit").hide();
+        $(this).closest('form').find("input[name='totalLesson']").val(0);
+        $(this).closest('form').find("input[name='totalLesson']").prop('readonly', true);
     } else {
         $("#select1_edit").hide();
         $("#select2_edit").show();
+        $(this).closest('form').find("input[name='totalLesson']").val("");
+        $(this).closest('form').find("input[name='totalLesson']").prop('readonly', false);
     }
 });
 
@@ -285,10 +293,7 @@ function showDataToEditModal(course)
             alert("Học Phí > 0!");
             return false;
             }
-        if (!inputTotalLesson.checkValidity()) {
-            alert("Số buổi học > 0!");
-            return false;
-            }
+
 
            if(inputSelect.value == 1)
            {
@@ -298,6 +303,11 @@ function showDataToEditModal(course)
                 }
            }else  if(inputSelect.value == 2)
             {
+                if (!inputTotalLesson.checkValidity() && inputTotalLesson.value != 0) {
+                        alert("Số buổi học > 0!");
+                        return false;
+                }
+
                 let form = $(document.getElementById(formId));
                 if(getEndDate(form) === null)
                 {
@@ -310,6 +320,9 @@ function showDataToEditModal(course)
     }
 
 $(document).ready(function() {
+
+
+$("#calDateSelect").val(1).change();
 var token = $("meta[name='_csrf']").attr("content");
 	/*    DATE     */
 	 //change totalLesstion
