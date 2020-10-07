@@ -39,7 +39,7 @@ public class ReportService {
 
     public List<ReportEndDateDTO> getReportEndDate(String startDate, String endDate, Integer campus)
     {
-        List<List<String>> reportRaws = repo.getReportIncome(startDate,endDate,campus);
+        List<List<String>> reportRaws = repo.getReportEndDate(startDate,endDate,campus);
         List<ReportEndDateDTO> dtos = new ArrayList<>();
         ReportEndDateDTO dto = null;
         for ( List<String> row: reportRaws) {
