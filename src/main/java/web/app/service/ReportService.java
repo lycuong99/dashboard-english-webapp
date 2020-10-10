@@ -16,6 +16,7 @@ import java.util.Locale;
 public class ReportService {
     @Autowired
     StudentRepo repo;
+    NumberFormat nf = NumberFormat.getInstance(new Locale("en", "US"));
 
     public List<ReportIncomeDTO> getReportIncome(String startDate, String endDate, Integer campus)
     {
@@ -33,10 +34,11 @@ public class ReportService {
             String dateRegis = row.get(7);
             String feeStr = row.get(8);
 
-            NumberFormat nf = NumberFormat.getInstance(new Locale("en", "US"));
+
             try {
                 double fee = Double.parseDouble(feeStr);
                 feeStr = nf.format(fee);
+
             }catch (Exception e)
             {
 
@@ -77,10 +79,12 @@ public class ReportService {
         for(ReportIncomeDTO dto : dtos)
         {
             double fee = 0;
+
             try {
-                fee = dto.getFee().trim().isEmpty() ? 0: Double.parseDouble(dto.getFee()) ;
+                fee = dto.getFee().trim().isEmpty() ? 0:  nf.parse(dto.getFee()).doubleValue();
             }catch (Exception e)
             {
+                e.printStackTrace();
                 fee = 0;
             }
             total += fee;
