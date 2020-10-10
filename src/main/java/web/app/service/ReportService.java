@@ -7,8 +7,10 @@ import web.app.dtos.ReportEndDateDTO;
 import web.app.dtos.ReportIncomeDTO;
 import web.app.repos.StudentRepo;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class ReportService {
@@ -30,6 +32,15 @@ public class ReportService {
             String courseId = row.get(6);
             String dateRegis = row.get(7);
             String feeStr = row.get(8);
+
+            NumberFormat nf = NumberFormat.getInstance(new Locale("en", "US"));
+            try {
+                double fee = Double.parseDouble(feeStr);
+                feeStr = nf.format(fee);
+            }catch (Exception e)
+            {
+
+            }
 
             dto = new ReportIncomeDTO(studentId,studentName,className,nameParent,phone,courseName,courseId,dateRegis,feeStr);
             dtos.add(dto);
