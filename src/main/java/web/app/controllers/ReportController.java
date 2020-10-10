@@ -1,11 +1,11 @@
 package web.app.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import web.app.dtos.ReportEndDateDTO;
 import web.app.dtos.ReportIncomeDTO;
@@ -15,7 +15,9 @@ import web.app.service.LoginService;
 import web.app.service.ReportService;
 
 import java.security.Principal;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 
 @Controller
@@ -33,11 +35,12 @@ public class ReportController {
     @Autowired
     ReportService reportService;
 
-    @RequestMapping("report_income")
+    @RequestMapping(value = "/report_income" , method = {RequestMethod.GET, RequestMethod.POST})
     public String reportIncome(@RequestParam(name = "startDate", defaultValue = "") String startDate,
                                @RequestParam(name = "endDate", defaultValue = "") String endDate,
                                @RequestParam(name = "campus", defaultValue = "1", required = false) Integer campus,
                                Model model, Principal principalUser) throws JsonProcessingException {
+        System.out.println("report_income");
         List<ReportIncomeDTO> dtos = null;
         double totalIncome = 0;
         try {
@@ -60,10 +63,9 @@ public class ReportController {
             return "/500";
         }
 
-
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
-        model.addAttribute("totalIncome", totalIncome);
+        model.addAttribute("totalIncome", NumberFormat.getInstance(new Locale("en", "US")).format(totalIncome));
         model.addAttribute("reportDTOs", dtos);
         return "report_income";
     }
@@ -74,7 +76,7 @@ public class ReportController {
                                @RequestParam(name = "campus", defaultValue = "1", required = false) Integer campus,
                                Model model, Principal principalUser) throws JsonProcessingException {
         List<ReportEndDateDTO> dtos = null;
-
+        System.out.println("report_end_date");
         try {
             String role = userDetailService.getRoleByUsername(principalUser.getName());
 
