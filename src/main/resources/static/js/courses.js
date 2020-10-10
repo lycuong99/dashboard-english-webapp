@@ -158,24 +158,7 @@ function deleteRow(trId, tableId) {
   	
   };
 
-function delStudent(id) {
-	$.ajax({
-	headers: {
-    									"X-CSRF-TOKEN": token
-    								},
-		type : 'DELETE',
-		url : "/course-api/delete/" + id,
-		success : function(result, status) {
-			/* alert("modify success!"); */
-			deleteRow("tr_" + id, "dataTableCourse");
-			$('#delModal').modal('hide');
-		},
-		error : function(e) {
-			alert("Modify not success!");
-		}
-	});
 
-};
 
 
 function createRowDataCourse(course)
@@ -321,7 +304,24 @@ function showDataToEditModal(course)
 
 $(document).ready(function() {
 
+function delStudent(id) {
+	$.ajax({
+	headers: {
+    									"X-CSRF-TOKEN": token
+    								},
+		type : 'DELETE',
+		url : "/course-api/delete/" + id,
+		success : function(result, status) {
+			/* alert("modify success!"); */
+			deleteRow("tr_" + id, "dataTableCourse");
+			$('#delModal').modal('hide');
+		},
+		error : function(e) {
+			alert("Modify not success!");
+		}
+	});
 
+};
 $("#calDateSelect").val(1).change();
 var token = $("meta[name='_csrf']").attr("content");
 	/*    DATE     */
