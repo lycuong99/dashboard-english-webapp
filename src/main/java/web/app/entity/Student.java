@@ -15,14 +15,16 @@ import lombok.Data;
 @AllArgsConstructor
 public class Student {
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(
+			strategy= GenerationType.TABLE
+	)
+
 	private Integer id;
 	
 	private String phone;
 	private Integer className;
 	private String name;
 	private String bOd;
-//	private String campus;
 	private String admissionDate;
 	private String note;
 	private String nameParent;

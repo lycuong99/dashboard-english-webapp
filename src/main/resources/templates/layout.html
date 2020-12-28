@@ -110,6 +110,26 @@
 								<i class="fas fa-table"></i>
 							</div> Báo cáo thời gian kết thúc khóa học
 						</a>
+
+<!--	Hoc sinh goi tron doi					-->
+						<a class="nav-link" href="/full-courses-student"  th:if="${session.ROLE} != 'ADMIN'">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-tachometer-alt"></i>
+							</div> Học sinh gói trọn đời
+						</a>
+						<th:block th:if="${session.ROLE}=='ADMIN'">
+							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFullcourse" aria-expanded="false" aria-controls="collapseLayouts">
+								<div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+								Học sinh gói trọn đời
+								<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+							</a>
+							<div class="collapse" id="collapseFullcourse" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+								<nav class="sb-sidenav-menu-nested nav">
+									<a class="nav-link" th:href="${'/full-courses-student?campus='+campus.id}"  th:each="campus, status: ${session.campuses}" th:text="${'Cơ sở '+campus.id}">Light Sidenav</a>
+								</nav>
+							</div>
+						</th:block>
+<!--			Hoc sinh goi tron doi				-->
 					</div>
 				</div>
 				<div class="sb-sidenav-footer">

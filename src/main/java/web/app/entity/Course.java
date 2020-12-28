@@ -3,6 +3,7 @@ package web.app.entity;
 import javax.persistence.*;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,14 @@ import java.util.List;
 @Table(name="courses")
 public class Course {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(
+			strategy= GenerationType.AUTO,
+			generator="native"
+	)
+	@GenericGenerator(
+			name = "native",
+			strategy = "native"
+	)
 	private int id;
 
 	private int classCourse = 0;

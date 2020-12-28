@@ -80,6 +80,6 @@ public class StudentController {
 	@RequestMapping("/403")
 	public String accessDenied() {
 		System.out.println("1212122");
-		return "401";
+		return "403";
 	}
 }

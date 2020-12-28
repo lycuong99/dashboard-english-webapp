@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Dashboard - SB Admin</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="container-fluid">
+        <h1 class="mt-4">Học sinh gói trọn đời</h1>
+        <div class="card mb-4">
+            <div class="card">
+                <div class="card-header">Thông tin truy cứu</div>
+
+                <div class="card-body">
+                    <form action="/full-courses-student" method="POST" class="form-inline" id="report-form">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <div class="input-group col-md-16">
+                            <label for="inputRangeDate" style="margin-bottom: 10px; margin-right: 0.5rem !important;">Ngày bắt đầu - Ngày kết thúc</label>
+                            <input id="inputRangeDate" name="dateRange"
+                                   style="text-align: center; background-color: white; width:340px;"
+                                   class="form-control mb-2 mr-sm-2 inputRangeDate"
+                                   placeholder="Ngày bắt đầu - Ngày kết thúc"
+
+                                   required="required"/>
+                            <input type="hidden" name="startDate" th:value="${startDate}"/>
+                            <input type="hidden" name="endDate" th:value="${endDate}"/>
+                            <input type="hidden" name="campus" th:value="${campus}">
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2" style="margin-right: 8px;">Submit</button>
+
+                        <a th:href="${'/full-courses-student?campus=' + campus }" class="btn btn-primary mb-2">View all</a>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card mb-4">
+            <div class="card-body table-responsive">
+
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h2>
+                                    Quản lí <b>Học Sinh</b>
+                                </h2>
+                            </div>
+                            <div class="col-sm-8">
+                                <button type="button" class="btn btn-light"
+                                        data-toggle="modal" data-target="#modal-insert">
+                                    <i class="fas fa-plus-circle"></i><span>Thêm học
+														sinh</span>
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <table class="table table-hover table-striped table-bordered"
+                           id="dataTableStudent_FullCourse" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Tên học sinh</th>
+                            <th>Tên Phụ Huynh</th>
+                            <th>Lớp</th>
+                            <th>Khóa học</th>
+                            <th>Học Phí</th>
+                            <th>Ngày sinh</th>
+                            <th>Ngày đăng ký</th>
+                            <th>Ngày bắt đầu</th>
+                            <th>Ngày kết thúc</th>
+                            <th>SĐT Phụ Huynh</th>
+                            <th>Tác Vụ</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th colspan="3"></th>
+                            <th colspan="2" style="text-align: right;">Tổng doanh thu: </th>
+                            <th colspan="6" th:text="${totalIncome}"></th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <!-- 	<tr th:hidden="${students.size() != 0}" id="noRecordTD">
+                            <td colspan="100%">No record</td>
+                        </tr> -->
+
+                        <tr th:each="student, status: ${students}"
+                            th:id="${'tr_'+student.id}">
+                            <td th:text="${student.id}"></td>
+                            <td th:text="${student.name}"></td>
+                            <td th:text="${student.nameParent}"></td>
+                            <td th:text="${student.className}"></td>
+                            <td th:text="${student.course}"></td>
+                            <td th:text="${student.fee}"></td>
+                            <td th:text="${student.bOd}"></td>
+                            <td th:text="${student.dateRegis}"></td>
+                            <td th:text="${student.dateStart}"></td>
+                            <td th:text="${student.dateEnd}"></td>
+                            <td th:text="${student.phone}"></td>
+                            <!--												<td th:text="${student.admissionDate}"></td>-->
+                            <td style="width: 130px;">
+
+                                <button class="btn delete" data-toggle="modal"
+                                        data-target="#delModal" th:data-delid="${student.id}"
+                                        th:data-delname="${student.name}">
+                                    <i class="fas fa-trash" data-toggle="tooltip"
+                                       title="Delete"></i>
+                                </button>
+<!--                                <form action="/courses" class="form-inline" style="display: inline;">-->
+<!--                                    <input type="hidden" name="id" th:value="${student.id}"/>-->
+<!--                                    <button class="btn button-style view" onclick=""  type="submit">-->
+<!--                                        <i class="far fa-eye"></i>-->
+<!--                                    </button>-->
+<!--                                </form>-->
+
+                                <button class="btn button-style view" data-toggle="modal"
+                                        th:data-student-id="${student.id}"
+                                        data-target="#modal-edit" type="button">
+                                    <i class="fas fa-pen" style="color: blue;"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!--Modals Section-->
+    <!-- Delete Modal -->
+    <div class="modal fade" id="delModal" tabindex="-1" role="dialog"
+         aria-labelledby="delModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="delForm" method="post" action="">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger" id="delModalLabel">Xóa
+                            học sinh?</h5>
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Bạn có chắc chắn muốn xóa <b id="delname"></b>?
+                        </p>
+                        <input id="delid" type="hidden" name="id"> <input
+                            type="hidden" name="delrequest">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">Hủy
+                            bỏ</button>
+                        <button id="del_btn" type="button" class="btn btn-danger">Đồng
+                            ý xóa</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--Insert Student Modal  -->
+    <div id="modal-insert" class="modal " role="dialog"
+         data-backdrop="static" data-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="false">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content-form">
+                <div class="modal-content" id="modal-content">
+
+                    <div class="modal-header">
+                        <h3>THÊM HỌC SINH</h3>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form method="POST" enctype="multipart/form-data"
+                              id="student-create-form">
+                            <div class="form-row ">
+                                <div class="input-group col-md-6 ">
+
+                                    <input  name="name" type="text"
+                                            class="form-control input--style-2"
+                                            placeholder="Họ tên học sinh" required="required" title="" />
+                                </div>
+                                <div class="input-group col-md-4">
+
+                                    <input name="className" type="number" min="0"
+                                           class="form-control input--style-2" placeholder="Lớp"
+                                           required="required" title="" />
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="input-group col-md-6">
+
+                                    <input name="nameParent"
+                                           class="form-control input--style-2"
+                                           placeholder="Họ tên phụ huynh" required="required"
+                                    />
+                                </div>
+                                <div class="input-group col-md-4">
+
+                                    <input  name="phone"
+                                            class="form-control input--style-2"
+                                            placeholder="SĐT phụ huynh" required="required" type="tel" pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}"
+                                    />
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="input-group col-md-6">
+
+                                    <input name="course"
+                                           class="form-control input--style-2"
+                                           placeholder="Khóa học" required="required"
+                                    />
+                                </div>
+                                <div class="input-group col-md-4">
+
+                                    <input  name="fee"
+                                            class="form-control input--style-2"
+                                            placeholder="Học phí" required="required" type="number" min="0"
+                                    />
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="input-group col-md-6">
+
+                                    <input  name="bOd" readonly
+                                            class="form-control input--style-2 js-datepicker"
+                                            placeholder="Ngày sinh" required="required"
+                                    /> <i
+                                        class="fas fa-calendar-alt input-icon js-btn-calendar"></i>
+                                </div>
+                                <div class="form-group col-md-4">
+
+                                    <input type="text"
+                                           class="form-control input--style-2" placeholder="Cơ sở"
+                                           th:value="${'Cơ sở '+campus}" required="required" readonly
+                                    />
+                                    <input type="hidden" name="campus" th:value="${campus}">
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="input-group col-md-6">
+
+                                    <input  name="dateRegis" readonly
+                                            class="form-control input--style-2 js-datepicker"
+                                            placeholder="Ngày đăng ký" required="required"
+                                    /> <i
+                                        class="fas fa-calendar-alt input-icon js-btn-calendar"></i>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+
+                                <div class="input-group col-md-6">
+
+                                    <input  name="dateStart" readonly
+                                            class="form-control input--style-2 js-datepicker"
+                                            placeholder="Ngày bắt đầu" required="required"
+                                    /> <i
+                                        class="fas fa-calendar-alt input-icon js-btn-calendar"></i>
+                                </div>
+                                <div class="input-group col-md-6">
+
+                                    <input  name="dateEnd" readonly
+                                            class="form-control input--style-2 js-datepicker"
+                                            placeholder="Ngày kết thúc" required="required"
+                                    /> <i
+                                        class="fas fa-calendar-alt input-icon js-btn-calendar"></i>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="input-group ">
+
+												<textarea rows="5" cols="10" name="note"
+                                                          placeholder="Ghi chú" class="form-control input--style-2"
+                                                          style="padding-left: 5px;"></textarea>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit"
+                                class="button-cancel-style btn btn-outline-secondary"
+                                data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-success" type="submit" id="btn-modal-insert">Save
+                            changes</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Edit Student Modal  -->
+    <div id="modal-edit" class="modal " role="dialog"
+         data-backdrop="static" data-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="false">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content-form">
+                <div class="modal-content" >
+
+                    <div class="modal-header">
+                        <h3>SỬA HỌC SINH</h3>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="modal-loading">
+                            <div class="d-flex justify-content-center" style="    align-items: center; ">
+                                <div class="spinner-border" style="width: 4rem; height: 4rem;" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <form method="POST" enctype="multipart/form-data"
+                              id="student-edit-form">
+
+                            <div class="form-row ">
+                                <div class="input-group col-md-6 ">
+                                    <input name="id" type="hidden" />
+                                    <input  name="name" type="text"
+                                            class="form-control input--style-2"
+                                            placeholder="Họ tên học sinh" required="required" title="" />
+                                </div>
+                                <div class="input-group col-md-4">
+
+                                    <input name="className" type="number" min="0"
+                                           class="form-control input--style-2" placeholder="Lớp"
+                                           required="required" title="" />
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="input-group col-md-6">
+
+                                    <input name="nameParent"
+                                           class="form-control input--style-2"
+                                           placeholder="Họ tên phụ huynh" required="required"
+                                    />
+                                </div>
+                                <div class="input-group col-md-4">
+
+                                    <input  name="phone"
+                                            class="form-control input--style-2"
+                                            placeholder="SĐT phụ huynh" required="required" type="tel" pattern="[0-9]{3}-?[0-9]{3}-?[0-9]{4}"
+                                    />
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="input-group col-md-6">
+
+                                    <input name="course"
+                                           class="form-control input--style-2"
+                                           placeholder="Khóa học" required="required"
+                                    />
+                                </div>
+                                <div class="input-group col-md-4">
+
+                                    <input  name="fee"
+                                            class="form-control input--style-2"
+                                            placeholder="Học phí" required="required" type="number" min="0"
+                                    />
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="input-group col-md-6">
+
+                                    <input  name="bOd" readonly
+                                            class="form-control input--style-2 js-datepicker"
+                                            placeholder="Ngày sinh" required="required"
+                                    /> <i
+                                        class="fas fa-calendar-alt input-icon js-btn-calendar"></i>
+                                </div>
+                                <div class="form-group col-md-4">
+
+                                    <input type="text"
+                                           class="form-control input--style-2" placeholder="Cơ sở"
+                                           th:value="${'Cơ sở '+campus}" required="required" readonly
+                                    />
+                                    <input type="hidden" name="campus" th:value="${campus}">
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="input-group col-md-6">
+
+                                    <input  name="dateRegis" readonly
+                                            class="form-control input--style-2 js-datepicker"
+                                            placeholder="Ngày đăng ký" required="required"
+                                    /> <i
+                                        class="fas fa-calendar-alt input-icon js-btn-calendar"></i>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+
+                                <div class="input-group col-md-6">
+
+                                    <input  name="dateStart" readonly
+                                            class="form-control input--style-2 js-datepicker"
+                                            placeholder="Ngày bắt đầu" required="required"
+                                    /> <i
+                                        class="fas fa-calendar-alt input-icon js-btn-calendar"></i>
+                                </div>
+                                <div class="input-group col-md-6">
+
+                                    <input  name="dateEnd" readonly
+                                            class="form-control input--style-2 js-datepicker"
+                                            placeholder="Ngày kết thúc" required="required"
+                                    /> <i
+                                        class="fas fa-calendar-alt input-icon js-btn-calendar"></i>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="input-group ">
+
+												<textarea rows="5" cols="10" name="note"
+                                                          placeholder="Ghi chú" class="form-control input--style-2"
+                                                          style="padding-left: 5px;"></textarea>
+                                </div>
+                            </div>
+
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit"
+                                class="button-cancel-style btn btn-outline-secondary"
+                                data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-success" id="btn-modal-update">Save
+                            changes</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+					$('#delModal').on('show.bs.modal', function(event) {
+						var delbutton = $(event.relatedTarget);
+						var delid = delbutton.data('delid');
+						var delname = delbutton.data('delname');
+						var delmodal = $(this);
+						delmodal.find('.modal-body #delid').val(delid);
+						delmodal.find('.modal-body #delname').text(delname);
+					});
+
+					$('#delForm').on('submit', function() {
+						$('#del_btn').prop('disabled', true);
+						$('#del_btn').html('&#9203; Đang xóa');
+					});
+				</script>
+
+</main>>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/module.js}"></script>
+    <script th:src="@{/js/scripts.js}"></script>
+    <script  type="text/javascript" th:src="@{/js/students-full-courses.js}"></script>
+    <script th:src="@{/js/report.js}"></script>
+    <script>
+        let dateFormat = "DD/MM/YYYY";
+        let startDate = '[[${startDate}]]';
+        let endDate = '[[${endDate}]]';
+        if(startDate!='')
+        {
+            $('#report-form').find('.inputRangeDate').val(startDate + ' - ' + endDate);
+
+            $('#report-form').find('.inputRangeDate').data('daterangepicker').startDate = moment(startDate, dateFormat);
+            $('#report-form').find('.inputRangeDate').data('daterangepicker').endDate = moment(endDate, dateFormat);
+        }
+
+    </script>
+</th:block>
+
+<!-- 	<script
+src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
+crossorigin="anonymous"></script> -->
+
+
+
+</body>
+</html>

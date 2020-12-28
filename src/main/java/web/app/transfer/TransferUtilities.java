@@ -1,15 +1,50 @@
 package web.app.transfer;
 
 import web.app.dtos.CourseDTO;
+import web.app.dtos.FullyCourseStudentDTO;
 import web.app.dtos.StudentDTO;
 import web.app.dtos.UserDTO;
-import web.app.entity.Campus;
-import web.app.entity.Course;
-import web.app.entity.Student;
-import web.app.entity.User;
+import web.app.entity.*;
 
-public class TransferUtilies {
+public class TransferUtilities {
+	public static FullyCourseStudent transferToEntity(FullyCourseStudentDTO dto)
+	{
+		FullyCourseStudent entity = new FullyCourseStudent();
 
+		entity.setCourse(dto.getCourse());
+		entity.setbOd(dto.getbOd());
+		entity.setCampusInt(dto.getCampus());
+		entity.setName(dto.getName());
+		entity.setNameParent(dto.getNameParent());
+		entity.setNote(dto.getNote());
+		entity.setClassName(dto.getClassName());
+		entity.setPhone(dto.getPhone());
+		entity.setFee(dto.getFee());
+		entity.setDateRegis(dto.getDateRegis());
+		entity.setDateStart(dto.getDateStart());
+		entity.setDateEnd(dto.getDateEnd());
+
+		return entity;
+	}
+	public static FullyCourseStudentDTO transferToDTO(FullyCourseStudent entity) {
+		FullyCourseStudentDTO dto = new FullyCourseStudentDTO();
+
+		dto.setId(entity.getId());
+		dto.setCourse(entity.getCourse());
+		dto.setbOd(entity.getbOd());
+		dto.setCampusObj(entity.getCampus());
+		dto.setName(entity.getName());
+		dto.setNameParent(entity.getNameParent());
+		dto.setNote(entity.getNote());
+		dto.setClassName(entity.getClassName());
+		dto.setPhone(entity.getPhone());
+		dto.setFee(entity.getFee());
+		dto.setDateRegis(entity.getDateRegis());
+		dto.setDateStart(entity.getDateStart());
+		dto.setDateEnd(entity.getDateEnd());
+
+		return dto;
+	}
 	public static StudentDTO transferToDTO(Student entity) {
 		StudentDTO dto = new StudentDTO();
 		

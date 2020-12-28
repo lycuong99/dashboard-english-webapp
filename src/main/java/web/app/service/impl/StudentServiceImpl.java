@@ -5,15 +5,13 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import web.app.dtos.StudentDTO;
 import web.app.entity.Student;
 import web.app.repos.StudentRepo;
 import web.app.service.IStudentService;
-import web.app.transfer.TransferUtilies;
+import web.app.transfer.TransferUtilities;
 
 
 @Component
@@ -60,7 +58,7 @@ public class StudentServiceImpl implements IStudentService{
 		// TODO Auto-generated method stub
 		Student entity = studentRepo.getOne(id);
 		
-		return TransferUtilies.transferToDTO(entity);
+		return TransferUtilities.transferToDTO(entity);
 	}
 
 	@Override
@@ -69,7 +67,7 @@ public class StudentServiceImpl implements IStudentService{
 		Student result = null;
 		try {
 			System.out.println("INSERT");
-			result = studentRepo.saveAndFlush(TransferUtilies.transferToEntity(dto));
+			result = studentRepo.saveAndFlush(TransferUtilities.transferToEntity(dto));
 			System.out.println(result.getId());
 		} catch (Exception e) {
 			throw new Exception("Can't insert student");
@@ -99,7 +97,7 @@ public class StudentServiceImpl implements IStudentService{
 //			e.printStackTrace();
 			throw new Exception("Can't update student");
 		}
-		return TransferUtilies.transferToDTO(entity);
+		return TransferUtilities.transferToDTO(entity);
 	}
 	
 }

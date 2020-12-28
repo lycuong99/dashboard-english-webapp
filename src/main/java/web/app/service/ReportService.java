@@ -81,7 +81,7 @@ public class ReportService {
             double fee = 0;
 
             try {
-                fee = dto.getFee().trim().isEmpty() ? 0:  nf.parse(dto.getFee()).doubleValue();
+                fee = dto.getFee().trim().isEmpty() ? 0: (double) nf.parse(dto.getFee()).doubleValue();
             }catch (Exception e)
             {
                 e.printStackTrace();

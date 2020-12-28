@@ -6,7 +6,7 @@ import web.app.dtos.UserDTO;
 import web.app.entity.User;
 import web.app.repos.UserRepo;
 import web.app.service.IUserService;
-import web.app.transfer.TransferUtilies;
+import web.app.transfer.TransferUtilities;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class UserServiceImpl implements IUserService {
             throw new Exception("User đã tồn tại");
         }
 
-        userRepo.saveAndFlush(TransferUtilies.transferToEntity(dto));
+        userRepo.saveAndFlush(TransferUtilities.transferToEntity(dto));
     }
 
     @Override

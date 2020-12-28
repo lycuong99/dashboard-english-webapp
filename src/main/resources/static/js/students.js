@@ -105,7 +105,6 @@ $(document)
 			var token = $("meta[name='_csrf']").attr("content");
 		/* $("#dataTableStudent").DataTable(); */
 		function delStudent(id) {
-
         		$.ajax({
         		headers: {
                 									"X-CSRF-TOKEN": token

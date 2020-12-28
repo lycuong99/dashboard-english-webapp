@@ -11,7 +11,7 @@ import web.app.entity.Student;
 import web.app.repos.CourseRepo;
 import web.app.repos.StudentRepo;
 import web.app.service.ICourseService;
-import web.app.transfer.TransferUtilies;
+import web.app.transfer.TransferUtilities;
 
 @Component
 public class CourseServiceImpl implements ICourseService{
@@ -30,7 +30,7 @@ public class CourseServiceImpl implements ICourseService{
 
 	@Override
 	public CourseDTO getCourse(Integer id) {
-		return TransferUtilies.transferToDTO(courseRepo.getOne(id));
+		return TransferUtilities.transferToDTO(courseRepo.getOne(id));
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class CourseServiceImpl implements ICourseService{
 
 	@Override
 	public CourseDTO insert(CourseDTO dto) {
-		Course entity = TransferUtilies.transferToEntity(dto);
+		Course entity = TransferUtilities.transferToEntity(dto);
 
 		Student student =studentRepo.getOne(dto.getStudentId());
 		entity.setStudent(student);

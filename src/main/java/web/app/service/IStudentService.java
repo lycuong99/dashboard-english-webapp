@@ -7,9 +7,11 @@ import javax.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import org.springframework.stereotype.Service;
 import web.app.dtos.StudentDTO;
 import web.app.entity.Student;
 
+@Service
 public interface IStudentService {
 	
 	public List<Student> getAllStudents();
