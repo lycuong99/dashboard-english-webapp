@@ -372,7 +372,7 @@ var token = $("meta[name='_csrf']").attr("content");
 		        let classCourse = form.find('input[name="classCourse"]').val();
 		        let fee = form.find('input[name="fee"]').val();
 		        let totalLesson = form.find('input[name="totalLesson"]').val();
-		        let note = form.find('input[name="note"]').val();
+		        let note = form.find('textarea[name="note"]').val();
 		        console.log("NOTE"+ note);
 		        let startDate;
 		        let endDate;

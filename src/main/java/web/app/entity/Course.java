@@ -14,12 +14,7 @@ import java.util.List;
 public class Course {
 	@Id
 	@GeneratedValue(
-			strategy= GenerationType.AUTO,
-			generator="native"
-	)
-	@GenericGenerator(
-			name = "native",
-			strategy = "native"
+			strategy= GenerationType.SEQUENCE
 	)
 	private int id;
 
