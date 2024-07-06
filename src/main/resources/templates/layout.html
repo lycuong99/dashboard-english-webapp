@@ -100,16 +100,21 @@
 							</nav>
 						</div>
 						</th:block>
+						<th:block th:if="${session.ROLE}=='ADMIN'">
 						<div class="sb-sidenav-menu-heading">BÁO CÁO</div>
 						<a class="nav-link" href="/report_income">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-chart-area"></i>
 							</div> Báo cáo tài chính
-						</a> <a class="nav-link" href="/report_end_date">
+						</a>
+						<a class="nav-link" href="/report_end_date">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-table"></i>
 							</div> Báo cáo thời gian kết thúc khóa học
 						</a>
+
+						</th:block>
+
 
 <!--	Hoc sinh goi tron doi					-->
 						<a class="nav-link" href="/full-courses-student"  th:if="${session.ROLE} != 'ADMIN'">
