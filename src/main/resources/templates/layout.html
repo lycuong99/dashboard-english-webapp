@@ -83,12 +83,12 @@
 								<i class="fas fa-tachometer-alt"></i>
 							</div> User
 						</a>
-						<a class="nav-link" href="/"  th:if="${session.ROLE} != 'ADMIN'">
+						<a class="nav-link" href="/"  th:if="${session.ROLE} != 'ADMIN' and ${session.ROLE} != 'MANAGER'">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-tachometer-alt"></i>
 							</div> Học sinh
 						</a>
-						<th:block th:if="${session.ROLE}=='ADMIN'">
+						<th:block th:if="${session.ROLE}=='ADMIN' or ${session.ROLE}=='MANAGER'">
 						<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
 							<div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
 							Học sinh
@@ -114,12 +114,12 @@
 						</a>
 
 <!--	Hoc sinh goi tron doi					-->
-						<a class="nav-link" href="/full-courses-student"  th:if="${session.ROLE} != 'ADMIN'">
+						<a class="nav-link" href="/full-courses-student"  th:if="${session.ROLE} != 'ADMIN' and ${session.ROLE} != 'MANAGER'">
 							<div class="sb-nav-link-icon">
 								<i class="fas fa-tachometer-alt"></i>
 							</div> Học sinh gói trọn đời
 						</a>
-						<th:block th:if="${session.ROLE}=='ADMIN'">
+						<th:block th:if="${session.ROLE}=='ADMIN' or ${session.ROLE}=='MANAGER'">
 							<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFullcourse" aria-expanded="false" aria-controls="collapseLayouts">
 								<div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
 								Học sinh gói trọn đời

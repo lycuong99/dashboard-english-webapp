@@ -45,7 +45,7 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
         System.out.println("SUCCESS LOGIN"+ user.getUsername() +"\nRole:"+user.getRole());
         HttpSession session = request.getSession(true);
         session.setAttribute("ROLE", user.getRole());
-        if(user.getRole().equalsIgnoreCase("ADMIN"))
+        if(user.getRole().equalsIgnoreCase("ADMIN") || user.getRole().equalsIgnoreCase("MANAGER"))
         {
             List<Campus> campusList = campusRepo.findAll();
             session.setAttribute("campuses", campusList);
