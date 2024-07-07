@@ -48,7 +48,7 @@
                             <input type="hidden" name="endDate" th:value="${endDate}"/>
                         </div>
 
-                        <div class="input-group" th:if="${session.ROLE} == 'ADMIN'">
+                        <div class="input-group" th:if="${session.ROLE} == 'ADMIN' or ${session.ROLE} == 'MANAGER'">
                             <select class="custom-select select-style-1" name="campus" th:value="${campus}" style="margin-bottom:10px; margin-left: 15px; margin-right:10px; " required>
                                 <option value="" selected disabled class="custom-select input--style-2">Chọn cơ sở</option>
                                 <option th:value="${c.id}" th:selected="${c.id}==${campus}" th:text="${c.id}" class="input--style-2" th:each="c, status: ${session.campuses}"></option>
