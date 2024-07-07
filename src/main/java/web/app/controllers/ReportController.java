@@ -80,7 +80,7 @@ public class ReportController {
         try {
             String role = userDetailService.getRoleByUsername(principalUser.getName());
 
-            if(!role.equalsIgnoreCase("admin")){
+            if(!role.equalsIgnoreCase("admin") && !role.equalsIgnoreCase("manager")){
                 campus = Integer.parseInt(role);
             }
 
